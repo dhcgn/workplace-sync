@@ -20,4 +20,3 @@ func readBuildInfo(key string, trim int) string {
 
 var buildInfoCommitID = readBuildInfo("vcs.revision", 16)
 var buildInfoTime = readBuildInfo("vcs.time", -1)
-var buildInfoModified = readBuildInfo("vcs.modified", -1)
