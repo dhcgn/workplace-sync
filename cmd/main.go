@@ -76,6 +76,11 @@ func main() {
 	}
 
 	if *allFlag {
+		pterm.Info.Printfln("All links will be downloaded:")
+		for i, l := range links.Links {
+			pterm.Info.Printfln("%2v. %v (%v)", (i + 1), l.GetDisplayName(), l.Version)
+		}
+
 		for _, l := range links.Links {
 			err := downloader.Get(l, folder)
 			if err != nil {
@@ -118,6 +123,7 @@ func main() {
 		return
 	}
 
+	fmt.Println()
 	fmt.Println("Done")
 }
 
@@ -129,13 +135,7 @@ func (i interaction) completer(d prompt.Document) []prompt.Suggest {
 	var suggestions []prompt.Suggest
 	for _, l := range i.lc.Links {
 		s := prompt.Suggest{}
-		if l.Name != "" {
-			s.Text = l.Name
-		} else {
-			splits := strings.Split(l.Url, "/")
-			s.Text = splits[len(splits)-1]
-		}
-
+		s.Text = l.GetDisplayName()
 		suggestions = append(suggestions, s)
 	}
 

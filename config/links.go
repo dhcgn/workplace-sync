@@ -1,6 +1,9 @@
 package config
 
-import "time"
+import (
+	"strings"
+	"time"
+)
 
 type LinksContainer struct {
 	Links        []Link    `json:"links"`
@@ -14,4 +17,13 @@ type Link struct {
 	Type             string `json:"type"`
 	DecompressFlat   bool   `json:"decompress_flat"`
 	DecompressFilter string `json:"decompress_filter"`
+}
+
+func (l *Link) GetDisplayName() string {
+	if l.Name != "" {
+		return l.Name
+	}
+	splits := strings.Split(l.Url, "/")
+	last := splits[len(splits)-1]
+	return last
 }

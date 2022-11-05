@@ -57,6 +57,7 @@
             "version": "latest"
         },
         {
+            "name": "vscode",
             "url": "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user",
             "type": "installer",
             "version": "latest"

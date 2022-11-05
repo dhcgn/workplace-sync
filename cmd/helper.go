@@ -1,6 +1,8 @@
 package main
 
-import "runtime/debug"
+import (
+	"runtime/debug"
+)
 
 func readBuildInfo(key string, trim int) string {
 	if info, ok := debug.ReadBuildInfo(); ok {
