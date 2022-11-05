@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"time"
 
 	"github.com/c-bata/go-prompt"
+	"github.com/dhcgn/workplace-sync/config"
 	"github.com/dhcgn/workplace-sync/downloader"
 )
 
@@ -61,7 +61,7 @@ func main() {
 		return
 	}
 
-	var links links
+	var links config.Links
 	if *hostFlag != "" {
 		l, err := getLinks(*hostFlag)
 		if err != nil {
@@ -85,7 +85,7 @@ func main() {
 			return
 		}
 		for _, l := range links.Links {
-			err := downloader.Get(l.Url, folder)
+			err := downloader.Get(l, folder)
 			if err != nil {
 				fmt.Println(err)
 				return
@@ -102,16 +102,6 @@ func main() {
 	fmt.Println("You selected " + t)
 }
 
-type links struct {
-	Links        []link    `json:"links"`
-	LastModified time.Time `json:"last_modified"`
-}
-
-type link struct {
-	Url     string `json:"url"`
-	Version string `json:"version"`
-}
-
 func createFolder(f string) error {
 	_, err := os.Stat(f)
 	if os.IsNotExist(err) {
@@ -123,53 +113,53 @@ func createFolder(f string) error {
 	return nil
 }
 
-func getLinksLocal(f string) (links, error) {
+func getLinksLocal(f string) (config.Links, error) {
 	data, err := os.ReadFile(f)
 	if err != nil {
-		return links{}, err
+		return config.Links{}, err
 	}
 
-	var l links
+	var l config.Links
 	err = json.Unmarshal(data, &l)
 	if err != nil {
-		return links{}, err
+		return config.Links{}, err
 	}
 	return l, nil
 }
 
-func getLinks(host string) (links, error) {
+func getLinks(host string) (config.Links, error) {
 	txts, err := net.LookupTXT(host)
 	if err != nil {
-		return links{}, err
+		return config.Links{}, err
 	}
 
 	if len(txts) == 0 {
-		return links{}, fmt.Errorf("no link")
+		return config.Links{}, fmt.Errorf("no link")
 	}
 
 	if len(txts) > 1 {
-		return links{}, fmt.Errorf("too many links")
+		return config.Links{}, fmt.Errorf("too many links")
 	}
 
 	u := txts[0]
 	if _, err := url.Parse(u); err != nil {
-		return links{}, err
+		return config.Links{}, err
 	}
 
 	resp, err := http.Get(u)
 	if err != nil {
-		return links{}, err
+		return config.Links{}, err
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return links{}, err
+		return config.Links{}, err
 	}
 
-	var l links
+	var l config.Links
 	err = json.Unmarshal(body, &l)
 	if err != nil {
-		return links{}, err
+		return config.Links{}, err
 	}
 	return l, nil
 }

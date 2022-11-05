@@ -10,24 +10,12 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/dhcgn/workplace-sync/config"
 	"github.com/schollz/progressbar/v3"
 )
 
-func Get(url, dir string) error {
-	file := path.Base(url)
-	target := filepath.Join(dir, file)
-
-	tempDestinationPath := target + ".tmp"
-
-	_, err := os.Stat(tempDestinationPath)
-	if err == nil {
-		err = os.Remove(tempDestinationPath)
-		if err != nil {
-			return err
-		}
-	}
-
-	req, err := http.NewRequest("GET", url, nil)
+func Get(link config.Link, dir string) error {
+	req, err := http.NewRequest("GET", link.Url, nil)
 	if err != nil {
 		return err
 	}
@@ -35,6 +23,40 @@ func Get(url, dir string) error {
 	if err != nil {
 		return err
 	}
+
+	file := path.Base(link.Url)
+
+	// shot urls are redirected to the actual file https://app/latest -> https://app/1.0.0.zip
+	if resp.Request != nil && resp.Request.Response != nil {
+		l, err := resp.Request.Response.Location()
+		if err == nil {
+			file = path.Base(l.String())
+		}
+	}
+
+	target := filepath.Join(dir, file)
+
+	if link.Type == "installer" {
+		installerFolder := filepath.Join(dir, "installer")
+		if _, err := os.Stat(installerFolder); os.IsNotExist(err) {
+			err := os.Mkdir(installerFolder, 0755)
+			if err != nil {
+				return err
+			}
+			target = filepath.Join(installerFolder, file)
+		}
+	}
+
+	tempDestinationPath := target + ".tmp"
+
+	_, err = os.Stat(tempDestinationPath)
+	if err == nil {
+		err = os.Remove(tempDestinationPath)
+		if err != nil {
+			return err
+		}
+	}
+
 	defer resp.Body.Close()
 
 	f, err := os.OpenFile(tempDestinationPath, os.O_CREATE|os.O_WRONLY, 0644)
