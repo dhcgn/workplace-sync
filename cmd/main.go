@@ -95,7 +95,7 @@ func main() {
 		lc: links,
 	}
 
-	fmt.Println("Please select file to download.")
+	fmt.Println("Please select file to download:")
 	t := prompt.Input("> ", interaction.completer)
 
 	if t == "" {
