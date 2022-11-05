@@ -11,9 +11,11 @@
         {
             "url": "https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-v1.5.2-win64.zip",
             "decompress_flat": true,
+            "decompress_filter": "\\.exe$",
             "version": "v1.5.2"
         },
         {
+            "name": "jxl",
             "url": "https://github.com/libjxl/libjxl/releases/download/v0.7.0/jxl-x64-windows-static.zip",
             "decompress_flat": true,
             "decompress_filter": "\\.exe$|\\.dll$",
@@ -52,6 +54,11 @@
         {
             "url": "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip",
             "decompress_flat": true,
+            "version": "latest"
+        },
+        {
+            "url": "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user",
+            "type": "installer",
             "version": "latest"
         }
     ],
