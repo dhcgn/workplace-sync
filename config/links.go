@@ -8,7 +8,8 @@ type Links struct {
 }
 
 type Link struct {
-	Url     string `json:"url"`
-	Version string `json:"version"`
-	Type    string `json:"type"`
+	Url            string `json:"url"`
+	Version        string `json:"version"`
+	Type           string `json:"type"`
+	DecompressFlat bool   `json:"decompress_flat"`
 }

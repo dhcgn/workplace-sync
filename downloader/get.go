@@ -27,7 +27,7 @@ func Get(link config.Link, dir string) error {
 	file := path.Base(link.Url)
 
 	// shot urls are redirected to the actual file https://app/latest -> https://app/1.0.0.zip
-	if resp.Request != nil && resp.Request.Response != nil {
+	if resp.Request != nil && resp.Request.Response != nil && path.Ext(link.Url) == "" {
 		l, err := resp.Request.Response.Location()
 		if err == nil {
 			file = path.Base(l.String())
@@ -43,8 +43,8 @@ func Get(link config.Link, dir string) error {
 			if err != nil {
 				return err
 			}
-			target = filepath.Join(installerFolder, file)
 		}
+		target = filepath.Join(installerFolder, file)
 	}
 
 	tempDestinationPath := target + ".tmp"
@@ -84,21 +84,31 @@ func Get(link config.Link, dir string) error {
 	}
 
 	if filepath.Ext(target) == ".zip" {
-		newFolder := strings.TrimRight(target, ".zip")
+		decompressFolder := ""
+		if link.DecompressFlat {
+			decompressFolder = dir
+		} else {
+			decompressFolder = strings.TrimRight(target, ".zip")
 
-		err := os.RemoveAll(newFolder)
+			err := os.RemoveAll(decompressFolder)
+			if err != nil {
+				return err
+			}
+
+			if _, err = os.Stat(decompressFolder); os.IsNotExist(err) {
+				err = os.Mkdir(decompressFolder, 0755)
+				if err != nil {
+					return err
+				}
+			}
+		}
+
+		_, err = unzip(target, decompressFolder)
 		if err != nil {
 			return err
 		}
 
-		if _, err = os.Stat(newFolder); os.IsNotExist(err) {
-			err = os.Mkdir(newFolder, 0755)
-			if err != nil {
-				return err
-			}
-		}
-
-		unzip(target, newFolder)
+		os.Remove(target)
 	}
 
 	return nil
