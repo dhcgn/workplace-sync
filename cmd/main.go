@@ -1,18 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
-	"io"
-	"net"
-	"net/http"
-	"net/url"
 	"os"
 
 	"github.com/c-bata/go-prompt"
 	"github.com/dhcgn/workplace-sync/config"
 	"github.com/dhcgn/workplace-sync/downloader"
+	"github.com/dhcgn/workplace-sync/linkscontainer"
 	"github.com/pterm/pterm"
 	"golang.org/x/exp/slices"
 )
@@ -47,14 +43,14 @@ func main() {
 
 	var linksContainer config.LinksContainer
 	if *hostFlag != "" {
-		l, err := getLinks(*hostFlag)
+		l, err := linkscontainer.GetLinksDNS(*hostFlag)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		linksContainer = l
 	} else {
-		l, err := getLinksLocal(*localSource)
+		l, err := linkscontainer.GetLinksLocal(*localSource)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -142,55 +138,4 @@ func createDownloadFolder(f string) error {
 		}
 	}
 	return nil
-}
-
-func getLinksLocal(f string) (config.LinksContainer, error) {
-	data, err := os.ReadFile(f)
-	if err != nil {
-		return config.LinksContainer{}, err
-	}
-
-	var l config.LinksContainer
-	err = json.Unmarshal(data, &l)
-	if err != nil {
-		return config.LinksContainer{}, err
-	}
-	return l, nil
-}
-
-func getLinks(host string) (config.LinksContainer, error) {
-	txts, err := net.LookupTXT(host)
-	if err != nil {
-		return config.LinksContainer{}, err
-	}
-
-	if len(txts) == 0 {
-		return config.LinksContainer{}, fmt.Errorf("no link")
-	}
-
-	if len(txts) > 1 {
-		return config.LinksContainer{}, fmt.Errorf("too many links")
-	}
-
-	u := txts[0]
-	if _, err := url.Parse(u); err != nil {
-		return config.LinksContainer{}, err
-	}
-
-	resp, err := http.Get(u)
-	if err != nil {
-		return config.LinksContainer{}, err
-	}
-	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return config.LinksContainer{}, err
-	}
-
-	var l config.LinksContainer
-	err = json.Unmarshal(body, &l)
-	if err != nil {
-		return config.LinksContainer{}, err
-	}
-	return l, nil
 }
