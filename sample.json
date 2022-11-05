@@ -16,11 +16,13 @@
         {
             "url": "https://github.com/libjxl/libjxl/releases/download/v0.7.0/jxl-x64-windows-static.zip",
             "decompress_flat": true,
+            "decompress_filter": "\\.exe$|\\.dll$",
             "version": "v0.7.0"
         },
         {
             "url": "https://github.com/upx/upx/releases/download/v4.0.0/upx-4.0.0-win64.zip",
             "decompress_flat": true,
+            "decompress_filter": "\\.exe$",
             "version": "4.0.0"
         },
         {

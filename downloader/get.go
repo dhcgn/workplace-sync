@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/dhcgn/workplace-sync/config"
@@ -103,7 +104,7 @@ func Get(link config.Link, dir string) error {
 			}
 		}
 
-		_, err = unzip(target, decompressFolder)
+		_, err = unzip(target, decompressFolder, link.DecompressFlat, link.DecompressFilter)
 		if err != nil {
 			return err
 		}
@@ -114,7 +115,15 @@ func Get(link config.Link, dir string) error {
 	return nil
 }
 
-func unzip(src string, destination string) ([]string, error) {
+func unzip(src string, destination string, decompressFlat bool, decompressFilter string) ([]string, error) {
+
+	var regex *regexp.Regexp
+	if decompressFilter != "" {
+		r, err := regexp.Compile(decompressFilter)
+		if err == nil {
+			regex = r
+		}
+	}
 
 	// a variable that will store any
 	//file names available in a array of strings
@@ -155,6 +164,13 @@ func unzip(src string, destination string) ([]string, error) {
 	)
 
 	for _, f := range r.File {
+		if f.FileInfo().IsDir() && decompressFlat {
+			continue
+		}
+
+		if regex != nil && !regex.MatchString(f.Name) {
+			continue
+		}
 
 		// this loop will run until there are
 		// files in the source directory & will
@@ -162,7 +178,12 @@ func unzip(src string, destination string) ([]string, error) {
 		// extracts into destination folder until an err arises
 
 		// Store "path/filename" for returning and using later on
-		fpath := filepath.Join(destination, f.Name)
+		fpath := ""
+		if decompressFlat {
+			fpath = filepath.Join(destination, filepath.Base(f.Name))
+		} else {
+			fpath = filepath.Join(destination, f.Name)
+		}
 
 		// Checking for any invalid file paths
 		if !strings.HasPrefix(fpath, filepath.Clean(destination)+string(os.PathSeparator)) {
