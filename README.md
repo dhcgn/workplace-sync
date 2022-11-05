@@ -1,3 +1,5 @@
+[![Go](https://github.com/dhcgn/workplace-sync/actions/workflows/go.yml/badge.svg)](https://github.com/dhcgn/workplace-sync/actions/workflows/go.yml)
+
 # workplace-sync
  
 > Keep your tools in sync!
@@ -45,4 +47,8 @@ workplace-sync.exe -host ws.hdev.io -all
 - Integrity check all the files
 - Change download location of single files 
 - Use a optional config file
-- Possiblility of using encrypted files
+- Possiblility of using encrypted files (with https://age-encryption.org/)
+- Secure DNS TXT requests
+- Update only missing files
+- Update only new files
+- Allow mutliple DNS TXT records
