@@ -14,6 +14,7 @@ import (
 	"github.com/c-bata/go-prompt"
 	"github.com/dhcgn/workplace-sync/config"
 	"github.com/dhcgn/workplace-sync/downloader"
+	"github.com/pterm/pterm"
 	"golang.org/x/exp/slices"
 )
 
@@ -28,18 +29,12 @@ var (
 )
 
 func main() {
-
-	// temp := links{
-	// 	Links: []link{
-	// 		{
-	// 			Url:     "https://download.sysinternals.com/files/SysinternalsSuite.zip",
-	// 			Version: "latest",
-	// 		},
-	// 	},
-	// 	LastModified: time.Now().UTC(),
-	// }
-	// d, _ := json.MarshalIndent(temp, "", "  ")
-	// fmt.Println(string(d))
+	fmt.Printf("Workplace Sync %v %v\n", buildInfoCommitID, buildInfoTime)
+	if buildInfoModified != "" {
+		fmt.Println("Dirty Build!")
+	}
+	fmt.Println("https://github.com/dhcgn/workplace-sync")
+	fmt.Println()
 
 	flag.Parse()
 	if *hostFlag == "" && *localSource == "" {
@@ -70,6 +65,8 @@ func main() {
 		}
 		links = l
 	}
+
+	pterm.Info.Printfln("Got %v links", len(links.Links))
 
 	if *allFlag {
 		err := createFolder(folder)

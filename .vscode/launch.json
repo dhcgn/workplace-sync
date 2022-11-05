@@ -27,6 +27,17 @@
                 "C:\\DEV\\workplace-sync\\sample.json",
                 "-all"
             ]
+        },
+        {
+            "name": "Local Interactive",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/",
+            "args": [
+                "-local",
+                "C:\\DEV\\workplace-sync\\sample.json"
+            ]
         }
     ]
 }
