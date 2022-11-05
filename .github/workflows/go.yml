@@ -28,7 +28,7 @@ jobs:
       env:
         GOOS: windows
         GOARCH: amd64
-      run: go build -v -ldflags '-w -s' -o workplace-sync.exe ./...
+      run: go build -v -ldflags '-w -s' -o workplace-sync.exe ./cmd/
 
     - name: Test
       run: go test -v ./...
