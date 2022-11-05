@@ -29,6 +29,11 @@ jobs:
         GOOS: windows
         GOARCH: amd64
       run: go build -v -ldflags '-w -s' -o workplace-sync.exe ./cmd/
+      
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.1
+      with:
+        path: workplace-sync.exe
 
     - name: Test
       run: go test -v ./...
