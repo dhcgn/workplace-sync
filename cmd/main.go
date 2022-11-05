@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"strings"
 
 	"github.com/c-bata/go-prompt"
 	"github.com/dhcgn/workplace-sync/config"
@@ -30,9 +29,6 @@ var (
 
 func main() {
 	fmt.Printf("Workplace Sync %v %v\n", buildInfoCommitID, buildInfoTime)
-	if buildInfoModified != "" {
-		fmt.Println("Dirty Build! Should not be used in production!")
-	}
 	fmt.Println("https://github.com/dhcgn/workplace-sync")
 	fmt.Println()
 
@@ -49,24 +45,24 @@ func main() {
 		return
 	}
 
-	var links config.LinksContainer
+	var linksContainer config.LinksContainer
 	if *hostFlag != "" {
 		l, err := getLinks(*hostFlag)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		links = l
+		linksContainer = l
 	} else {
 		l, err := getLinksLocal(*localSource)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		links = l
+		linksContainer = l
 	}
 
-	pterm.Info.Printfln("Got %v links", len(links.Links))
+	pterm.Info.Printfln("Got %v links", len(linksContainer.Links))
 
 	pterm.Info.Printfln("Use download folder %v", folder)
 	err := createDownloadFolder(folder)
@@ -77,11 +73,11 @@ func main() {
 
 	if *allFlag {
 		pterm.Info.Printfln("All links will be downloaded:")
-		for i, l := range links.Links {
+		for i, l := range linksContainer.Links {
 			pterm.Info.Printfln("%2v. %v (%v)", (i + 1), l.GetDisplayName(), l.Version)
 		}
 
-		for _, l := range links.Links {
+		for _, l := range linksContainer.Links {
 			err := downloader.Get(l, folder)
 			if err != nil {
 				pterm.Error.Printfln("link %v, folder: %v, error: %v", l.Url, folder, err)
@@ -92,7 +88,7 @@ func main() {
 	}
 
 	interaction := interaction{
-		lc: links,
+		lc: linksContainer,
 	}
 
 	fmt.Println("Please select file to download:")
@@ -103,21 +99,16 @@ func main() {
 		return
 	}
 
-	i := slices.IndexFunc(links.Links, func(l config.Link) bool {
-		if l.Name != "" && l.Name == t {
-			return true
-		}
-		splits := strings.Split(l.Url, "/")
-		last := splits[len(splits)-1]
-		return last == t
+	i := slices.IndexFunc(linksContainer.Links, func(l config.Link) bool {
+		return l.GetDisplayName() == t
 	})
 
 	if i == -1 {
-		fmt.Println("No file found")
+		fmt.Println("No file found, please complete the whole name.")
 		return
 	}
 
-	err = downloader.Get(links.Links[i], folder)
+	err = downloader.Get(linksContainer.Links[i], folder)
 	if err != nil {
 		fmt.Println(err)
 		return

@@ -54,6 +54,7 @@
         {
             "url": "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip",
             "decompress_flat": true,
+            "decompress_filter": "\\.exe$",
             "version": "latest"
         },
         {
