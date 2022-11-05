@@ -1,0 +1,13 @@
+{
+    "links": [
+        {
+            "url": "https://download.sysinternals.com/files/SysinternalsSuite.zip",
+            "version": "latest"
+        },
+        {
+            "url": "https://mt.lv/winbox64",
+            "version": "latest"
+        }
+    ],
+    "last_modified": "2022-11-04T18:32:39.5262556Z"
+}
