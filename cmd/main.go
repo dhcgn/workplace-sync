@@ -31,7 +31,7 @@ var (
 func main() {
 	fmt.Printf("Workplace Sync %v %v\n", buildInfoCommitID, buildInfoTime)
 	if buildInfoModified != "" {
-		fmt.Println("Dirty Build!")
+		fmt.Println("Dirty Build! Should not be used in production!")
 	}
 	fmt.Println("https://github.com/dhcgn/workplace-sync")
 	fmt.Println()
@@ -68,17 +68,19 @@ func main() {
 
 	pterm.Info.Printfln("Got %v links", len(links.Links))
 
+	pterm.Info.Printfln("Use download folder %v", folder)
+	err := createDownloadFolder(folder)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	if *allFlag {
-		err := createFolder(folder)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
 		for _, l := range links.Links {
 			err := downloader.Get(l, folder)
 			if err != nil {
-				fmt.Println(err)
-				return
+				pterm.Error.Printfln("link %v, folder: %v, error: %v", l.Url, folder, err)
+				continue
 			}
 		}
 		return
@@ -110,7 +112,7 @@ func main() {
 		return
 	}
 
-	err := downloader.Get(links.Links[i], folder)
+	err = downloader.Get(links.Links[i], folder)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -140,7 +142,7 @@ func (i interaction) completer(d prompt.Document) []prompt.Suggest {
 	return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)
 }
 
-func createFolder(f string) error {
+func createDownloadFolder(f string) error {
 	_, err := os.Stat(f)
 	if os.IsNotExist(err) {
 		err := os.Mkdir(f, 0755)
