@@ -2,10 +2,12 @@ package interaction
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/c-bata/go-prompt"
 	"github.com/dhcgn/workplace-sync/config"
 	"github.com/dhcgn/workplace-sync/downloader"
+	"github.com/pterm/pterm"
 	"golang.org/x/exp/slices"
 )
 
@@ -18,11 +20,11 @@ func Prompt(linksContainer config.LinksContainer) {
 		lc: linksContainer,
 	}
 
-	fmt.Println("Please select file to download:")
+	pterm.Info.Printfln("Please select file to download:")
 	t := prompt.Input("> ", interaction.completer)
 
 	if t == "" {
-		fmt.Println("No file selected")
+		pterm.Error.Printfln("No file selected")
 		return
 	}
 
@@ -30,17 +32,39 @@ func Prompt(linksContainer config.LinksContainer) {
 		return l.GetDisplayName() == t
 	})
 
-	if i == -1 {
-		fmt.Println("No file found, please complete the whole name.")
+	if i != -1 {
+		err := downloader.Get(linksContainer.Links[i], config.GetConfig().DestinationFolder)
+		if err != nil {
+			pterm.Error.Print(err)
+		}
 		return
 	}
 
-	err := downloader.Get(linksContainer.Links[i], config.GetConfig().DestinationFolder)
+	pterm.Warning.Printfln("No file found, try prefix")
+
+	var match []config.Link
+	for _, l := range linksContainer.Links {
+		if strings.HasPrefix(l.GetDisplayName(), t) {
+			match = append(match, l)
+		}
+	}
+
+	if len(match) == 0 {
+		pterm.Error.Printfln("No file found with suffix %v", t)
+		return
+	}
+
+	if len(match) != 1 {
+		pterm.Error.Printfln("Multiple files found with suffix %v", t)
+		return
+	}
+
+	pterm.Success.Printfln("Found file %v", match[0].GetDisplayName())
+
+	err := downloader.Get(match[0], config.GetConfig().DestinationFolder)
 	if err != nil {
-		fmt.Println(err)
-		return
+		pterm.Error.Print(err)
 	}
-
 }
 
 func (i interaction) completer(d prompt.Document) []prompt.Suggest {
