@@ -74,3 +74,4 @@ workplace-sync.exe -host ws.hdev.io -all
 - Update only missing files
 - Update only new files
 - Allow mutliple DNS TXT records
+- Install ps1 script
