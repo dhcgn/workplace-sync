@@ -121,8 +121,10 @@ type interaction struct {
 func (i interaction) completer(d prompt.Document) []prompt.Suggest {
 	var suggestions []prompt.Suggest
 	for _, l := range i.lc.Links {
-		s := prompt.Suggest{}
-		s.Text = l.GetDisplayName()
+		s := prompt.Suggest{
+			Text:        l.GetDisplayName(),
+			Description: fmt.Sprintf("%v from %v", l.Version, l.GetHostFromLink()),
+		}
 		suggestions = append(suggestions, s)
 	}
 

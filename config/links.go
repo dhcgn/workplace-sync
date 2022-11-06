@@ -1,6 +1,7 @@
 package config
 
 import (
+	"net/url"
 	"strings"
 	"time"
 )
@@ -26,4 +27,15 @@ func (l *Link) GetDisplayName() string {
 	splits := strings.Split(l.Url, "/")
 	last := splits[len(splits)-1]
 	return last
+}
+
+func (l *Link) GetHostFromLink() string {
+	if l.Url == "" {
+		return ""
+	}
+	u, err := url.Parse(l.Url)
+	if err != nil {
+		return ""
+	}
+	return u.Host
 }
