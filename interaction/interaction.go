@@ -40,11 +40,11 @@ func Prompt(linksContainer config.LinksContainer) {
 		return
 	}
 
-	pterm.Warning.Printfln("No file found, try prefix")
+	pterm.Warning.Printfln("No file found, try case-ignore prefix")
 
 	var match []config.Link
 	for _, l := range linksContainer.Links {
-		if strings.HasPrefix(l.GetDisplayName(), t) {
+		if strings.HasPrefix(strings.ToLower(l.GetDisplayName()), strings.ToLower(t)) {
 			match = append(match, l)
 		}
 	}
