@@ -12,6 +12,28 @@ So I need only this tool on every of my computers to access easy all my tools.
 
 ![](docs/assets/demo.gif)
 
+## Installation
+
+1. Add DNS TXT record with a link to your JSON file or use my at ws.hdev.io
+
+```json
+{
+    "links": [
+        {
+            "url": "https://download.sysinternals.com/files/SysinternalsSuite.zip",
+            "version": "latest"
+        },
+                {
+            "name": "zstd",
+            "url": "https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-v1.5.2-win64.zip",
+            "decompress_flat": true,
+            "decompress_filter": "\\.exe$",
+            "version": "v1.5.2"
+        }
+    ]
+}
+```
+
 ## Usage
 
 The folder `C:\ws\` will be created.

@@ -153,13 +153,19 @@ func unzip(src string, destination string, decompressFlat bool, decompressFilter
 	// defer makes sure the file is closed
 	// at the end of the program no matter what.
 
-	var uncompressedSize64 uint64 = 0
+	var files = 0
 	for _, f := range r.File {
-		uncompressedSize64 += f.UncompressedSize64
+		if f.FileInfo().IsDir() {
+			continue
+		}
+		if regex != nil && !regex.MatchString(f.Name) {
+			continue
+		}
+		files += 1
 	}
 
-	bar := progressbar.DefaultBytes(
-		int64(uncompressedSize64),
+	barFiles := progressbar.Default(
+		int64(files),
 		"unzip "+filepath.Base(src),
 	)
 
@@ -171,6 +177,9 @@ func unzip(src string, destination string, decompressFlat bool, decompressFilter
 		if regex != nil && !regex.MatchString(f.Name) {
 			continue
 		}
+
+		barFiles.Describe("unzip " + filepath.Base(f.Name))
+		barFiles.Add(1)
 
 		// this loop will run until there are
 		// files in the source directory & will
@@ -232,7 +241,7 @@ func unzip(src string, destination string, decompressFlat bool, decompressFilter
 			return filenames, err
 		}
 
-		_, err = io.Copy(io.MultiWriter(outFile, bar), rc)
+		_, err = io.Copy(outFile, rc)
 
 		// Close the file without defer so that
 		// it closes the outfile before the loop
