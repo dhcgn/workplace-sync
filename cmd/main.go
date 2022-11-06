@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/dhcgn/workplace-sync/config"
 	"github.com/dhcgn/workplace-sync/downloader"
@@ -23,7 +24,7 @@ var (
 )
 
 func main() {
-	fmt.Printf("Workplace Sync %v %v\n", buildInfoCommitID, buildInfoTime)
+	fmt.Printf("Workplace Sync %v %v %v\n", buildInfoCommitID, buildInfoTime, runtime.Version())
 	fmt.Println("https://github.com/dhcgn/workplace-sync")
 	fmt.Println()
 
