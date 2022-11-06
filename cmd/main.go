@@ -43,6 +43,7 @@ func main() {
 
 	var linksContainer config.LinksContainer
 	if *hostFlag != "" {
+		pterm.Info.Printfln("Optain links from DNS TXT record of %v", *hostFlag)
 		l, err := linkscontainer.GetLinksDNS(*hostFlag)
 		if err != nil {
 			fmt.Println(err)
@@ -50,6 +51,7 @@ func main() {
 		}
 		linksContainer = l
 	} else {
+		pterm.Info.Printfln("Optain links from local file %v", *localSource)
 		l, err := linkscontainer.GetLinksLocal(*localSource)
 		if err != nil {
 			fmt.Println(err)
@@ -58,7 +60,7 @@ func main() {
 		linksContainer = l
 	}
 
-	pterm.Info.Printfln("Got %v links", len(linksContainer.Links))
+	pterm.Success.Printfln("Got %v links", len(linksContainer.Links))
 
 	pterm.Info.Printfln("Use download folder %v", destFolder)
 	err := createDownloadFolder(destFolder)
