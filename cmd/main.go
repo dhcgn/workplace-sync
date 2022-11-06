@@ -5,22 +5,21 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/c-bata/go-prompt"
 	"github.com/dhcgn/workplace-sync/config"
 	"github.com/dhcgn/workplace-sync/downloader"
+	"github.com/dhcgn/workplace-sync/interaction"
 	"github.com/dhcgn/workplace-sync/linkscontainer"
 	"github.com/pterm/pterm"
-	"golang.org/x/exp/slices"
-)
-
-const (
-	folder = `C:\ws\`
 )
 
 var (
 	hostFlag    = flag.String("host", "", "The host which TXT record is set to an url of links")
 	localSource = flag.String("local", "", "The local source of links")
 	allFlag     = flag.Bool("all", false, "Download all links")
+)
+
+var (
+	destFolder = config.GetConfig().DestinationFolder
 )
 
 func main() {
@@ -60,8 +59,8 @@ func main() {
 
 	pterm.Info.Printfln("Got %v links", len(linksContainer.Links))
 
-	pterm.Info.Printfln("Use download folder %v", folder)
-	err := createDownloadFolder(folder)
+	pterm.Info.Printfln("Use download folder %v", destFolder)
+	err := createDownloadFolder(destFolder)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -74,61 +73,19 @@ func main() {
 		}
 
 		for _, l := range linksContainer.Links {
-			err := downloader.Get(l, folder)
+			err := downloader.Get(l, destFolder)
 			if err != nil {
-				pterm.Error.Printfln("link %v, folder: %v, error: %v", l.Url, folder, err)
+				pterm.Error.Printfln("link %v, folder: %v, error: %v", l.Url, destFolder, err)
 				continue
 			}
 		}
 		return
 	}
 
-	interaction := interaction{
-		lc: linksContainer,
-	}
-
-	fmt.Println("Please select file to download:")
-	t := prompt.Input("> ", interaction.completer)
-
-	if t == "" {
-		fmt.Println("No file selected")
-		return
-	}
-
-	i := slices.IndexFunc(linksContainer.Links, func(l config.Link) bool {
-		return l.GetDisplayName() == t
-	})
-
-	if i == -1 {
-		fmt.Println("No file found, please complete the whole name.")
-		return
-	}
-
-	err = downloader.Get(linksContainer.Links[i], folder)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	interaction.Prompt(linksContainer)
 
 	fmt.Println()
 	fmt.Println("Done")
-}
-
-type interaction struct {
-	lc config.LinksContainer
-}
-
-func (i interaction) completer(d prompt.Document) []prompt.Suggest {
-	var suggestions []prompt.Suggest
-	for _, l := range i.lc.Links {
-		s := prompt.Suggest{
-			Text:        l.GetDisplayName(),
-			Description: fmt.Sprintf("%v from %v", l.Version, l.GetHostFromLink()),
-		}
-		suggestions = append(suggestions, s)
-	}
-
-	return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)
 }
 
 func createDownloadFolder(f string) error {
