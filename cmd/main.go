@@ -17,7 +17,7 @@ var (
 	hostFlag    = flag.String("host", "", "The host which TXT record is set to an url of links")
 	localSource = flag.String("local", "", "The local source of links")
 	allFlag     = flag.Bool("all", false, "Download all links")
-	nameFlag    = flag.String("name", "", "The name of the tool to download")
+	nameFlag    = flag.String("name", "", "The name or preffix of the tool to download")
 )
 
 var (
