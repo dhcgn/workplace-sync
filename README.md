@@ -53,7 +53,7 @@ host or localSource is required
 
 The folder `C:\ws\` will be created.
 
-### Selected Download
+### Manual Selected Download
 
 ```
 workplace-sync.exe -host ws.hdev.io
@@ -71,6 +71,21 @@ Please select file to download:
    jxl                                      
    upx-4.0.0-win64.zip                      
    age-v1.0.0-windows-amd64.zip
+```
+### Pre-Selected Download
+
+```
+workplace-sync.exe -host ws.hdev.io -name ag
+Workplace Sync   go1.19.3
+https://github.com/dhcgn/workplace-sync
+
+ INFO  Optain links from DNS TXT record of ws.hdev.io
+ SUCCESS  Got 25 links
+ INFO  Use download folder c:\ws\
+ WARNING  No file found, try case-ignore prefix
+ SUCCESS  Found file age
+age-v1.0.0-windows-amd64.zip 100% |████████████████████████████████████████████████████████████████████████████████████| (4.1/4.1 MB, 7.1 MB/s)        
+unzip age-keygen.exe 100% |████████████████████████████████████████████████████████████████████████████████████████████████████| (2/2, 54 it/s)    
 ```
 
 ### Download all files
