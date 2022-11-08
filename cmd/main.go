@@ -17,6 +17,7 @@ var (
 	hostFlag    = flag.String("host", "", "The host which TXT record is set to an url of links")
 	localSource = flag.String("local", "", "The local source of links")
 	allFlag     = flag.Bool("all", false, "Download all links")
+	nameFlag    = flag.String("name", "", "The name of the tool to download")
 )
 
 var (
@@ -37,6 +38,12 @@ func main() {
 
 	if *hostFlag != "" && *localSource != "" {
 		fmt.Println("host and localSource are mutually exclusive")
+		flag.PrintDefaults()
+		return
+	}
+
+	if *allFlag && *nameFlag != "" {
+		fmt.Println("all and name are mutually exclusive")
 		flag.PrintDefaults()
 		return
 	}
@@ -85,7 +92,12 @@ func main() {
 		return
 	}
 
-	interaction.Prompt(linksContainer)
+	if *nameFlag != "" {
+		interaction.Download(*nameFlag, linksContainer)
+		return
+	}
+
+	interaction.PromptAndDownload(linksContainer)
 
 	fmt.Println()
 	fmt.Println("Done")

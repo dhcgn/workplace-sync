@@ -47,3 +47,14 @@ func (lc *LinksContainer) SortLinks() {
 		return a.GetDisplayName() < b.GetDisplayName()
 	})
 }
+
+func (lc LinksContainer) GetLinksByDisplayNamePreffix(name string) []Link {
+	var match []Link
+	for _, l := range lc.Links {
+		if strings.HasPrefix(strings.ToLower(l.GetDisplayName()), strings.ToLower(name)) {
+			match = append(match, l)
+		}
+	}
+
+	return match
+}
