@@ -23,6 +23,7 @@ func GetLinksLocal(f string) (config.LinksContainer, error) {
 	if err != nil {
 		return config.LinksContainer{}, err
 	}
+	l.SortLinks()
 	return l, nil
 }
 
@@ -60,5 +61,6 @@ func GetLinksDNS(host string) (config.LinksContainer, error) {
 	if err != nil {
 		return config.LinksContainer{}, err
 	}
+	l.SortLinks()
 	return l, nil
 }

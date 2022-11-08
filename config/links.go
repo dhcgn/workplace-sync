@@ -4,6 +4,8 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
+	"golang.org/x/exp/slices"
 )
 
 type LinksContainer struct {
@@ -38,4 +40,10 @@ func (l *Link) GetHostFromLink() string {
 		return ""
 	}
 	return u.Host
+}
+
+func (lc *LinksContainer) SortLinks() {
+	slices.SortFunc(lc.Links, func(a, b Link) bool {
+		return a.GetDisplayName() < b.GetDisplayName()
+	})
 }
