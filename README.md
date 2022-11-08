@@ -8,6 +8,21 @@ This tool (under heavy development) downloads files from a list of links. These 
 
 So I need only this tool on every of my computers to access easy all my tools.
 
+```
+Workplace Sync 305705825cc917f8 2022-11-05T22:56:49Z go1.19.3
+https://github.com/dhcgn/workplace-sync
+
+host or localSource is required
+  -all
+        Download all links
+  -host string
+        The host which TXT record is set to an url of links
+  -local string
+        The local source of links
+  -name string
+        The name or preffix of the tool to download
+```
+
 ## Demo
 
 ![](docs/assets/demo.gif)
