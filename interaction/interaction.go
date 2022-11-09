@@ -2,7 +2,6 @@ package interaction
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/c-bata/go-prompt"
 	"github.com/dhcgn/workplace-sync/config"
@@ -15,14 +14,7 @@ type interaction struct {
 	lc config.LinksContainer
 }
 
-func Prompt(linksContainer config.LinksContainer) {
-	interaction := interaction{
-		lc: linksContainer,
-	}
-
-	pterm.Info.Printfln("Please select file to download:")
-	t := prompt.Input("> ", interaction.completer)
-
+func Download(t string, linksContainer config.LinksContainer) {
 	if t == "" {
 		pterm.Error.Printfln("No file selected")
 		return
@@ -42,12 +34,7 @@ func Prompt(linksContainer config.LinksContainer) {
 
 	pterm.Warning.Printfln("No file found, try case-ignore prefix")
 
-	var match []config.Link
-	for _, l := range linksContainer.Links {
-		if strings.HasPrefix(strings.ToLower(l.GetDisplayName()), strings.ToLower(t)) {
-			match = append(match, l)
-		}
-	}
+	match := linksContainer.GetLinksByDisplayNamePreffix(t)
 
 	if len(match) == 0 {
 		pterm.Error.Printfln("No file found with suffix %v", t)
@@ -65,6 +52,17 @@ func Prompt(linksContainer config.LinksContainer) {
 	if err != nil {
 		pterm.Error.Print(err)
 	}
+}
+
+func PromptAndDownload(linksContainer config.LinksContainer) {
+	interaction := interaction{
+		lc: linksContainer,
+	}
+
+	pterm.Info.Printfln("Please select file to download:")
+	t := prompt.Input("> ", interaction.completer)
+
+	Download(t, linksContainer)
 }
 
 func (i interaction) completer(d prompt.Document) []prompt.Suggest {

@@ -4,6 +4,8 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
+	"golang.org/x/exp/slices"
 )
 
 type LinksContainer struct {
@@ -38,4 +40,21 @@ func (l *Link) GetHostFromLink() string {
 		return ""
 	}
 	return u.Host
+}
+
+func (lc *LinksContainer) SortLinks() {
+	slices.SortFunc(lc.Links, func(a, b Link) bool {
+		return a.GetDisplayName() < b.GetDisplayName()
+	})
+}
+
+func (lc LinksContainer) GetLinksByDisplayNamePreffix(name string) []Link {
+	var match []Link
+	for _, l := range lc.Links {
+		if strings.HasPrefix(strings.ToLower(l.GetDisplayName()), strings.ToLower(name)) {
+			match = append(match, l)
+		}
+	}
+
+	return match
 }

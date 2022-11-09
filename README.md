@@ -8,6 +8,21 @@ This tool (under heavy development) downloads files from a list of links. These 
 
 So I need only this tool on every of my computers to access easy all my tools.
 
+```
+Workplace Sync 305705825cc917f8 2022-11-05T22:56:49Z go1.19.3
+https://github.com/dhcgn/workplace-sync
+
+host or localSource is required
+  -all
+        Download all links
+  -host string
+        The host which TXT record is set to an url of links
+  -local string
+        The local source of links
+  -name string
+        The name or preffix of the tool to download
+```
+
 ## Demo
 
 ![](docs/assets/demo.gif)
@@ -38,7 +53,7 @@ So I need only this tool on every of my computers to access easy all my tools.
 
 The folder `C:\ws\` will be created.
 
-### Selected Download
+### Manual Selected Download
 
 ```
 workplace-sync.exe -host ws.hdev.io
@@ -56,6 +71,21 @@ Please select file to download:
    jxl                                      
    upx-4.0.0-win64.zip                      
    age-v1.0.0-windows-amd64.zip
+```
+### Pre-Selected Download
+
+```
+workplace-sync.exe -host ws.hdev.io -name ag
+Workplace Sync   go1.19.3
+https://github.com/dhcgn/workplace-sync
+
+ INFO  Optain links from DNS TXT record of ws.hdev.io
+ SUCCESS  Got 25 links
+ INFO  Use download folder c:\ws\
+ WARNING  No file found, try case-ignore prefix
+ SUCCESS  Found file age
+age-v1.0.0-windows-amd64.zip 100% |████████████████████████████████████████████████████████████████████████████████████| (4.1/4.1 MB, 7.1 MB/s)        
+unzip age-keygen.exe 100% |████████████████████████████████████████████████████████████████████████████████████████████████████| (2/2, 54 it/s)    
 ```
 
 ### Download all files
