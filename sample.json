@@ -146,7 +146,40 @@
             "url": "https://www.dotpdn.com/files/paint.net.4.3.12.install.anycpu.web.zip",
             "type": "installer",
             "version": "4.3.12"
+        },
+        {
+            "name": "Everything",
+            "url": "https://www.voidtools.com/Everything-1.4.1.1022.x64-Setup.exe",
+            "type": "installer",
+            "version": "1.4.1.1022"
+        },
+        {
+            "name": "Wireguard",
+            "url": "https://download.wireguard.com/windows-client/wireguard-installer.exe",
+            "type": "installer",
+            "version": "latest"
+        },
+        {
+            "name": "BeyondCompare",
+            "url": "https://scootersoftware.com/BCompare-4.4.4.27058.exe",
+            "type": "installer",
+            "version": "4.4.4.27058"
+        },
+        {
+            "name": "putty",
+            "url": "https://the.earth.li/~sgtatham/putty/latest/w64/putty.exe",
+            "version": "latest"
+        },
+        {
+            "name": "puttygen",
+            "url": "https://the.earth.li/~sgtatham/putty/latest/w64/puttygen.exe",
+            "version": "latest"
+        },
+        {
+            "name": "mkcert",
+            "url": "https://dl.filippo.io/mkcert/latest?for=windows/amd64",
+            "version": "latest"
         }
     ],
-    "last_modified": "2022-11-04T18:32:39.5262556Z"
+    "last_modified": "2022-11-12T18:29:30.1705656Z"
 }
