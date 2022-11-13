@@ -48,7 +48,7 @@ jobs:
                 mv "$exe.signed" "$exe"
               done
             fi
-            ( cd "$DIR"; zip ws.zip -r ws )
+            ( cd "$DIR/ws"; zip ws.zip * )
             mv "$DIR/ws.zip" "ws-$VERSION-$GOOS-$GOARCH.zip"
           else
             tar -cvzf "ws-$VERSION-$GOOS-$GOARCH.tar.gz" -C "$DIR" ws
