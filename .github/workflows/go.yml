@@ -3,11 +3,7 @@
 
 name: Build and Test
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [push, pull_request]
 
 permissions:
   contents: read    
@@ -24,16 +20,18 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
-        go-version: 1.19.x
+        go-version: 1.x
 
     - name: Build
       run: go build -v ./...
       
-    - name: Build Release
+    - name: Build Windows Release
       env:
         GOOS: windows
         GOARCH: amd64
-      run: go build -v -trimpath -ldflags '-w -s' -o workplace-sync.exe ./cmd/workplace-sync
+      run: | 
+        VERSION="$(git describe --tags)"
+        go build -v -trimpath -ldflags '-w -s -X main.Version=$VERSION' -o workplace-sync.exe ./cmd/workplace-sync
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.1

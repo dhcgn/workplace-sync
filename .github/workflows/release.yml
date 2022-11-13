@@ -39,12 +39,12 @@ jobs:
           if [ "$GOOS" == "windows" ]; then
             sudo apt-get update && sudo apt-get install -y osslsigncode
             if [ -n "${{ secrets.SIGN_PASS }}" ]; then
-              for exe in "$DIR"/age/*.exe; do
+              for exe in "$DIR"/ws/*.exe; do
                 /usr/bin/osslsigncode sign -t "http://timestamp.comodoca.com" \
                   -certs .github/workflows/certs/uitacllc.crt \
                   -key .github/workflows/certs/uitacllc.key \
                   -pass "${{ secrets.SIGN_PASS }}" \
-                  -n age -in "$exe" -out "$exe.signed"
+                  -n ws -in "$exe" -out "$exe.signed"
                 mv "$exe.signed" "$exe"
               done
             fi
@@ -74,9 +74,9 @@ jobs:
       - name: Download workflow artifacts
         uses: actions/download-artifact@v2
         with:
-          name: age-binaries
+          name: ws-binaries
       - name: Upload release artifacts
-        run: gh release upload "$GITHUB_REF_NAME" age-*
+        run: gh release upload "$GITHUB_REF_NAME" ws-*
         env:
           GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
