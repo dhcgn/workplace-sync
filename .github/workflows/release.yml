@@ -49,7 +49,7 @@ jobs:
               done
             fi
             ( cd "$DIR/ws"; zip ws.zip * )
-            mv "$DIR/ws.zip" "ws-$VERSION-$GOOS-$GOARCH.zip"
+            mv "$DIR/ws/ws.zip" "ws-$VERSION-$GOOS-$GOARCH.zip"
           else
             tar -cvzf "ws-$VERSION-$GOOS-$GOARCH.tar.gz" -C "$DIR" ws
           fi
