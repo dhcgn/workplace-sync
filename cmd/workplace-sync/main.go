@@ -29,7 +29,7 @@ var (
 )
 
 func main() {
-	fmt.Printf("Workplace Sync %v (%v %v %v)\n", Version, buildInfoCommitID, buildInfoTime, runtime.Version())
+	fmt.Printf("Workplace Sync %v (%v %v)\n", Version, buildInfoTime, runtime.Version())
 	fmt.Println("https://github.com/dhcgn/workplace-sync")
 	fmt.Println()
 
