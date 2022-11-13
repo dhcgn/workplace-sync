@@ -61,8 +61,8 @@ jobs:
       - name: Upload workflow artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: age-binaries
-          path: age-*
+          name: ws-binaries
+          path: ws-*
   upload:
     name: Upload release binaries
     if: github.event_name == 'release'
