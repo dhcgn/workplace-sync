@@ -33,7 +33,7 @@ jobs:
       env:
         GOOS: windows
         GOARCH: amd64
-      run: go build -v -trimpath -ldflags '-w -s' -o workplace-sync.exe ./cmd/
+      run: go build -v -trimpath -ldflags '-w -s' -o workplace-sync.exe ./cmd/workplace-sync
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.1
