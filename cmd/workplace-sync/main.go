@@ -6,10 +6,12 @@ import (
 	"os"
 	"runtime"
 
+	update "github.com/dhcgn/gh-update"
 	"github.com/dhcgn/workplace-sync/config"
 	"github.com/dhcgn/workplace-sync/downloader"
 	"github.com/dhcgn/workplace-sync/interaction"
 	"github.com/dhcgn/workplace-sync/linkscontainer"
+
 	"github.com/pterm/pterm"
 )
 
@@ -22,6 +24,7 @@ var (
 	localSource = flag.String("local", "", "The local source of links")
 	allFlag     = flag.Bool("all", false, "Download all links")
 	nameFlag    = flag.String("name", "", "The name or preffix of the tool to download")
+	updateFlag  = flag.Bool("update", false, "The name or preffix of the tool to download")
 )
 
 var (
@@ -33,7 +36,31 @@ func main() {
 	fmt.Println("https://github.com/dhcgn/workplace-sync")
 	fmt.Println()
 
+	if update.IsUpdateFinished() {
+		fmt.Println("Update finished!")
+		err := update.CleanUp(os.Args[0])
+		if err != nil {
+			fmt.Println("ERROR Clean up:", err)
+		}
+
+		return
+	}
+
 	flag.Parse()
+
+	if *updateFlag {
+		fmt.Println("Checking for updates...")
+		err := update.SelfUpdateWithLatestAndRestart("dhcgn/workplace-sync", Version, "^ws-.*windows.*zip$", os.Args[0])
+
+		if err != nil && err == update.ErrorNoNewVersionFound {
+			fmt.Println("No new version found")
+		} else if err != nil {
+			fmt.Println("ERROR Update:", err)
+		}
+
+		return
+	}
+
 	if *hostFlag == "" && *localSource == "" {
 		fmt.Println("host or localSource is required")
 		flag.PrintDefaults()
