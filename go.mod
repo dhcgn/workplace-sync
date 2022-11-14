@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/c-bata/go-prompt v0.2.6
+	github.com/dhcgn/gh-update v0.0.0-20221114204427-fd08445f71a3
 	github.com/pterm/pterm v0.12.49
 )
 
@@ -11,7 +12,6 @@ require (
 	atomicgo.dev/cursor v0.1.1 // indirect
 	atomicgo.dev/keyboard v0.2.8 // indirect
 	github.com/containerd/console v1.0.3 // indirect
-	github.com/dhcgn/gh-update v0.0.0-20221114204427-fd08445f71a3 // indirect
 	github.com/gookit/color v1.5.2 // indirect
 	github.com/lithammer/fuzzysearch v1.1.5 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
