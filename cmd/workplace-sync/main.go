@@ -14,6 +14,10 @@ import (
 )
 
 var (
+	Version = "dev"
+)
+
+var (
 	hostFlag    = flag.String("host", "", "The host which TXT record is set to an url of links")
 	localSource = flag.String("local", "", "The local source of links")
 	allFlag     = flag.Bool("all", false, "Download all links")
@@ -25,7 +29,7 @@ var (
 )
 
 func main() {
-	fmt.Printf("Workplace Sync %v %v %v\n", buildInfoCommitID, buildInfoTime, runtime.Version())
+	fmt.Printf("Workplace Sync %v (%v %v)\n", Version, buildInfoTime, runtime.Version())
 	fmt.Println("https://github.com/dhcgn/workplace-sync")
 	fmt.Println()
 
