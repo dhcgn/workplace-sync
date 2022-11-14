@@ -36,9 +36,9 @@ func main() {
 	fmt.Println("https://github.com/dhcgn/workplace-sync")
 	fmt.Println()
 
-	if update.IsUpdateFinished() {
+	if update.IsFirstStartAfterUpdate() {
 		fmt.Println("Update finished!")
-		err := update.CleanUp(os.Args[0])
+		err := update.CleanUpAfterUpdate(os.Args[0])
 		if err != nil {
 			fmt.Println("ERROR Clean up:", err)
 		}
