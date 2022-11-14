@@ -38,9 +38,14 @@ func main() {
 
 	if update.IsFirstStartAfterUpdate() {
 		fmt.Println("Update finished!")
-		err := update.CleanUpAfterUpdate(os.Args[0])
-		if err != nil {
-			fmt.Println("ERROR Clean up:", err)
+		oldPid := update.GetOldPid()
+		if oldPid != fmt.Sprint(os.Getpid()) {
+			err := update.CleanUpAfterUpdate(os.Args[0], oldPid)
+			if err != nil {
+				fmt.Println("ERROR Clean up:", err)
+			}
+		} else {
+			fmt.Println("ERROR: PID is the same!")
 		}
 
 		return

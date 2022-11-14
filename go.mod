@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/c-bata/go-prompt v0.2.6
-	github.com/dhcgn/gh-update v0.0.0-20221114214711-7a9d1afd7399
+	github.com/dhcgn/gh-update v0.0.0-20221114224243-b04d15b2036e
 	github.com/pterm/pterm v0.12.49
 )
 
