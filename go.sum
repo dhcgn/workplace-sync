@@ -26,6 +26,8 @@ github.com/dhcgn/gh-update v0.0.0-20221114214711-7a9d1afd7399 h1:BkbZUYDBFE1Hrcg
 github.com/dhcgn/gh-update v0.0.0-20221114214711-7a9d1afd7399/go.mod h1:1qJk0FjeEh5g8IgM6humiEVRQefB0TFKa0avKwd45sU=
 github.com/dhcgn/gh-update v0.0.0-20221114224243-b04d15b2036e h1:rRO7KwqV9x1xFX+WVnI4PjDMCYmHbzHVzfEZ95Cxmhg=
 github.com/dhcgn/gh-update v0.0.0-20221114224243-b04d15b2036e/go.mod h1:1qJk0FjeEh5g8IgM6humiEVRQefB0TFKa0avKwd45sU=
+github.com/dhcgn/gh-update v0.0.0-20221114225102-13fa062c57c8 h1:JA0SjoEv0wVjp3tYclMVtGsW+lDd4iK4Uuh14JbPl0k=
+github.com/dhcgn/gh-update v0.0.0-20221114225102-13fa062c57c8/go.mod h1:1qJk0FjeEh5g8IgM6humiEVRQefB0TFKa0avKwd45sU=
 github.com/gookit/color v1.4.2/go.mod h1:fqRyamkC1W8uxl+lxCQxOT09l/vYfZ+QeiX3rKQHCoQ=
 github.com/gookit/color v1.5.0/go.mod h1:43aQb+Zerm/BWh2GnrgOQm7ffz7tvQXEKV6BFMl7wAo=
 github.com/gookit/color v1.5.2 h1:uLnfXcaFjlrDnQDT+NCBcfhrXqYTx/rcCa6xn01Y8yI=
