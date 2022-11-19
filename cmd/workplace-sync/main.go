@@ -133,6 +133,15 @@ func main() {
 		return
 	}
 
+	pterm.Info.Printfln("The following tools are available:")
+	for i, l := range linksContainer.Links {
+		fmt.Printf("%v (%v)", l.GetDisplayName(), l.Version)
+		if i != len(linksContainer.Links)-1 {
+			fmt.Print(", ")
+		}
+	}
+	fmt.Println()
+
 	interaction.PromptAndDownload(linksContainer)
 
 	fmt.Println()

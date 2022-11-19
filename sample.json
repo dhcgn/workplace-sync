@@ -44,6 +44,7 @@
             "version": "0.10"
         },
         {
+            "name": "OOSU10",
             "url": "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe",
             "version": "10"
         },
@@ -51,12 +52,6 @@
             "name": "7z",
             "url": "https://www.7-zip.org/a/7z2201-x64.exe",
             "version": "22.01",
-            "type": "installer"
-        },
-        {
-            "name": "BCompare",
-            "url": "https://www.scootersoftware.com/BCompare-4.4.4.27058.exe",
-            "version": "4.4.4 build 27058",
             "type": "installer"
         },
         {
@@ -179,7 +174,13 @@
             "name": "mkcert",
             "url": "https://dl.filippo.io/mkcert/latest?for=windows/amd64",
             "version": "latest"
+        },
+        {
+            "name": "git",
+            "url": "https://github.com/git-for-windows/git/releases/download/v2.38.1.windows.1/Git-2.38.1-64-bit.exe",
+            "type": "installer",
+            "version": "v2.38.1"
         }
     ],
-    "last_modified": "2022-11-12T18:29:30.1705656Z"
+    "last_modified": "2022-11-19T22:49:05.718215Z"
 }
