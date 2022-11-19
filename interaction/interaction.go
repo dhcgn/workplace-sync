@@ -60,7 +60,7 @@ func PromptAndDownload(linksContainer config.LinksContainer) {
 	}
 
 	pterm.Info.Printfln("Please select file to download:")
-	t := prompt.Input("> ", interaction.completer)
+	t := prompt.Input("> ", interaction.completer, prompt.OptionMaxSuggestion(20))
 
 	Download(t, linksContainer)
 }
