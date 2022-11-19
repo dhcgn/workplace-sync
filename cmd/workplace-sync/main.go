@@ -54,7 +54,7 @@ func main() {
 	flag.Parse()
 
 	if *updateFlag {
-		fmt.Print("Checking for updates ... ")
+		fmt.Println("Checking for updates ... ")
 		err := update.SelfUpdateWithLatestAndRestart("dhcgn/workplace-sync", Version, "^ws-.*windows.*zip$", os.Args[0])
 
 		if err != nil && err == update.ErrorNoNewVersionFound {
