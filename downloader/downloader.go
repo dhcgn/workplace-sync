@@ -29,9 +29,14 @@ func Get(link config.Link, dir string) error {
 
 	// shot urls are redirected to the actual file https://app/latest -> https://app/1.0.0.zip
 	if resp.Request != nil && resp.Request.Response != nil && path.Ext(link.Url) == "" {
-		l, err := resp.Request.Response.Location()
-		if err == nil {
-			file = path.Base(l.String())
+		r := resp.Request.Referer()
+		if r != "" && strings.HasSuffix(r, ".exe") {
+			file = path.Base(r)
+		} else {
+			l, err := resp.Request.Response.Location()
+			if err == nil {
+				file = path.Base(l.String())
+			}
 		}
 	}
 
