@@ -14,12 +14,14 @@ type LinksContainer struct {
 }
 
 type Link struct {
-	Name             string `json:"name"`
-	Url              string `json:"url"`
-	Version          string `json:"version"`
-	Type             string `json:"type"`
-	DecompressFlat   bool   `json:"decompress_flat"`
-	DecompressFilter string `json:"decompress_filter"`
+	Name                string            `json:"name"`
+	Url                 string            `json:"url"`
+	Version             string            `json:"version"`
+	Type                string            `json:"type"`
+	DecompressFlat      bool              `json:"decompress_flat"`
+	DecompressFilter    string            `json:"decompress_filter"`
+	Skipped             bool              `json:"skipped"`
+	OverwriteFilesNames map[string]string `json:"overwrite_files_names"`
 }
 
 func (l *Link) GetDisplayName() string {

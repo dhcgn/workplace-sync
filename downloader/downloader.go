@@ -15,6 +15,25 @@ import (
 	"github.com/schollz/progressbar/v3"
 )
 
+func adjustOverwriteFilesNames(target string, filter map[string]string) (string, error) {
+	if filter == nil {
+		return target, nil
+	}
+
+	for regex, new := range filter {
+		r, err := regexp.Compile(regex)
+		if err != nil {
+			return "", err
+		}
+
+		if r.MatchString(filepath.Base(target)) {
+			target = filepath.Join(filepath.Dir(target), new)
+			return target, nil
+		}
+	}
+	return target, nil
+}
+
 func Get(link config.Link, dir string) error {
 	req, err := http.NewRequest("GET", link.Url, nil)
 	if err != nil {
@@ -51,6 +70,11 @@ func Get(link config.Link, dir string) error {
 			}
 		}
 		target = filepath.Join(installerFolder, file)
+	}
+
+	target, err = adjustOverwriteFilesNames(target, link.OverwriteFilesNames)
+	if err != nil {
+		return err
 	}
 
 	tempDestinationPath := target + ".tmp"
@@ -109,7 +133,7 @@ func Get(link config.Link, dir string) error {
 			}
 		}
 
-		_, err = unzip(target, decompressFolder, link.DecompressFlat, link.DecompressFilter)
+		_, err = unzip(target, decompressFolder, link)
 		if err != nil {
 			return err
 		}
@@ -120,11 +144,11 @@ func Get(link config.Link, dir string) error {
 	return nil
 }
 
-func unzip(src string, destination string, decompressFlat bool, decompressFilter string) ([]string, error) {
+func unzip(src string, destination string, link config.Link) ([]string, error) {
 
 	var regex *regexp.Regexp
-	if decompressFilter != "" {
-		r, err := regexp.Compile(decompressFilter)
+	if link.DecompressFilter != "" {
+		r, err := regexp.Compile(link.DecompressFilter)
 		if err == nil {
 			regex = r
 		}
@@ -175,7 +199,7 @@ func unzip(src string, destination string, decompressFlat bool, decompressFilter
 	)
 
 	for _, f := range r.File {
-		if f.FileInfo().IsDir() && decompressFlat {
+		if f.FileInfo().IsDir() && link.DecompressFlat {
 			continue
 		}
 
@@ -193,10 +217,15 @@ func unzip(src string, destination string, decompressFlat bool, decompressFilter
 
 		// Store "path/filename" for returning and using later on
 		fpath := ""
-		if decompressFlat {
+		if link.DecompressFlat {
 			fpath = filepath.Join(destination, filepath.Base(f.Name))
 		} else {
 			fpath = filepath.Join(destination, f.Name)
+		}
+
+		fpath, err = adjustOverwriteFilesNames(fpath, link.OverwriteFilesNames)
+		if err != nil {
+			return filenames, err
 		}
 
 		// Checking for any invalid file paths
