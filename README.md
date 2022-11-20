@@ -9,18 +9,20 @@ This tool (under heavy development) downloads files from a list of links. These 
 So I need only this tool on every of my computers to access easy all my tools.
 
 ```
-Workplace Sync 305705825cc917f8 2022-11-05T22:56:49Z go1.19.3
+Workplace Sync v0.0.10 (2022-11-20T19:47:36Z go1.19.2)
 https://github.com/dhcgn/workplace-sync
 
 host or localSource is required
   -all
-        Download all links
+        Download all links, except skipped ones
   -host string
-        The host which TXT record is set to an url of links
+        The host which DNS TXT record points to an url of links.json
   -local string
-        The local source of links
+        The local source of links (.json)
   -name string
         The name or preffix of the tool to download
+  -update
+        Update app with latest release from github.com
 ```
 
 ## Demo
@@ -38,14 +40,33 @@ host or localSource is required
             "url": "https://download.sysinternals.com/files/SysinternalsSuite.zip",
             "version": "latest"
         },
-                {
-            "name": "zstd",
-            "url": "https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-v1.5.2-win64.zip",
+        {
+            "name": "age-rc",
+            "url": "https://github.com/FiloSottile/age/releases/download/v1.1.0-rc.1/age-v1.1.0-rc.1-windows-amd64.zip",
             "decompress_flat": true,
             "decompress_filter": "\\.exe$",
-            "version": "v1.5.2"
-        }
-    ]
+            "overwrite_files_names": {
+                "^age.exe$": "age-rc.exe",
+                "^age-keygen.exe$": "age-keygen-rc.exe"
+            },
+            "version": "v1.1.0-rc.1"
+        },
+        {
+            "name": "BeyondCompare",
+            "url": "https://scootersoftware.com/BCompare-4.4.4.27058.exe",
+            "type": "installer",
+            "version": "4.4.4.27058"
+        },
+        {
+            "name": "ffmpeg",
+            "url": "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip",
+            "decompress_flat": true,
+            "decompress_filter": "\\.exe$",
+            "version": "latest",
+            "skipped": true
+        },        
+    ],
+    "last_modified": "2022-11-19T22:49:05.718215Z"
 }
 ```
 
@@ -58,34 +79,32 @@ The folder `C:\ws\` will be created.
 ```
 workplace-sync.exe -host ws.hdev.io
 
-Workplace Sync  
+Workplace Sync v0.0.10 (2022-11-20T19:47:36Z go1.19.2)
 https://github.com/dhcgn/workplace-sync
 
- INFO  Got 12 links
- INFO  Use download folder C:\ws\
-Please select file to download:
+ INFO  Optain links from DNS TXT record of ws.hdev.io
+ SUCCESS  Got 30 links
+ INFO  Use download folder c:\ws\
+ INFO  The following tools are available:
+7z (22.01), BeyondCompare (4.4.4.27058), Everything (1.4.1.1022), ImageMagick (7.1.0-51), OOSU10 (10), Obsidian (1.0.3), SciTE (531), SysinternalsSuite.zip (latest), WinSCP (5.21.5), Wireguard (latest), Wireshark (4.0.1), age (v1.0.0), cloc (v1.94), ffmpeg (latest), git (v2.38.1), jxl (v0.7.0), minisign (0.10), mkcert (latest), mkcert (v1.4.4), nmap (7.93), notepad-plus-plus (v8.4.6), paint.net (4.3.12), putty (latest), puttygen (latest), restic (v0.14.0), upx (4.0.0), vscode (latest), vt-cli (0.10.4), winbox (latest), zstd (v1.5.2)
+ INFO  Please select file to download:
 >
-   SysinternalsSuite.zip                    
-   winbox64                                 
-   zstd-v1.5.2-win64.zip                    
-   jxl                                      
-   upx-4.0.0-win64.zip                      
-   age-v1.0.0-windows-amd64.zip
 ```
 ### Pre-Selected Download
 
 ```
 workplace-sync.exe -host ws.hdev.io -name ag
-Workplace Sync   go1.19.3
+
+Workplace Sync v0.0.10 (2022-11-20T19:47:36Z go1.19.2)
 https://github.com/dhcgn/workplace-sync
 
  INFO  Optain links from DNS TXT record of ws.hdev.io
- SUCCESS  Got 25 links
+ SUCCESS  Got 30 links
  INFO  Use download folder c:\ws\
  WARNING  No file found, try case-ignore prefix
  SUCCESS  Found file age
-age-v1.0.0-windows-amd64.zip 100% |████████████████████████████████████████████████████████████████████████████████████| (4.1/4.1 MB, 7.1 MB/s)        
-unzip age-keygen.exe 100% |████████████████████████████████████████████████████████████████████████████████████████████████████| (2/2, 54 it/s)    
+age-v1.0.0-windows-amd64.zip 100% |█████████████████████████████████████████████████████| (4.1/4.1 MB, 33 MB/s)
+unzip age-keygen.exe 100% |████████████████████████████████████████████████████████████████████| (2/2, 61 it/s)  
 ```
 
 ### Download all files
