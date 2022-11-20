@@ -38,6 +38,23 @@
             "version": "v1.0.0"
         },
         {
+            "name": "age-rc",
+            "url": "https://github.com/FiloSottile/age/releases/download/v1.1.0-rc.1/age-v1.1.0-rc.1-windows-amd64.zip",
+            "decompress_flat": true,
+            "decompress_filter": "\\.exe$",
+            "overwrite_files_names": {
+                "^age.exe$":"age-rc.exe",
+                "^age-keygen.exe$":"age-keygen-rc.exe"
+            },
+            "version": "v1.1.0-rc.1"
+        },
+        {
+            "name": "age-plugin-yubikey",
+            "url": "https://github.com/str4d/age-plugin-yubikey/releases/download/v0.3.0/age-plugin-yubikey-v0.3.0-x86_64-windows.zip",
+            "decompress_flat": true,
+            "version": "v0.3.0"
+        },
+        {
             "name": "minisign",
             "url": "https://github.com/jedisct1/minisign/releases/download/0.10/minisign-0.10-win64.zip",
             "decompress_flat": true,

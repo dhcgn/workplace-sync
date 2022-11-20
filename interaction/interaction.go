@@ -7,7 +7,6 @@ import (
 	"github.com/dhcgn/workplace-sync/config"
 	"github.com/dhcgn/workplace-sync/downloader"
 	"github.com/pterm/pterm"
-	"golang.org/x/exp/slices"
 )
 
 type interaction struct {
@@ -20,12 +19,20 @@ func Download(t string, linksContainer config.LinksContainer) {
 		return
 	}
 
-	i := slices.IndexFunc(linksContainer.Links, func(l config.Link) bool {
-		return l.GetDisplayName() == t
-	})
+	found := make([]config.Link, 0)
+	for _, l := range linksContainer.Links {
+		if l.GetDisplayName() == t {
+			found = append(found, l)
+		}
+	}
 
-	if i != -1 {
-		err := downloader.Get(linksContainer.Links[i], config.GetConfig().DestinationFolder)
+	if len(found) > 1 {
+		pterm.Error.Printfln("Multiple matches found for: %v", t)
+		return
+	}
+
+	if len(found) == 1 {
+		err := downloader.Get(found[0], config.GetConfig().DestinationFolder)
 		if err != nil {
 			pterm.Error.Print(err)
 		}
@@ -37,12 +44,12 @@ func Download(t string, linksContainer config.LinksContainer) {
 	match := linksContainer.GetLinksByDisplayNamePreffix(t)
 
 	if len(match) == 0 {
-		pterm.Error.Printfln("No file found with suffix %v", t)
+		pterm.Error.Printfln("No file found with suffix: %v", t)
 		return
 	}
 
 	if len(match) != 1 {
-		pterm.Error.Printfln("Multiple files found with suffix %v", t)
+		pterm.Error.Printfln(`Multiple files found with suffix: %v`, t)
 		return
 	}
 
