@@ -119,6 +119,12 @@ func main() {
 		}
 
 		for _, l := range linksContainer.Links {
+
+			if l.Skipped {
+				pterm.Info.Printfln("Skipped %v (%v)", l.GetDisplayName(), l.Version)
+				continue
+			}
+
 			err := downloader.Get(l, destFolder)
 			if err != nil {
 				pterm.Error.Printfln("link %v, folder: %v, error: %v", l.Url, destFolder, err)
