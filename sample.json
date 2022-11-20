@@ -97,12 +97,6 @@
             "version": "0.10.4"
         },
         {
-            "name": "putty",
-            "url": "https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.78-installer.msi",
-            "type": "installer",
-            "version": "0.78"
-        },
-        {
             "name": "WinSCP",
             "url": "https://winscp.net/download/WinSCP-5.21.5-Setup.exe",
             "type": "installer",
