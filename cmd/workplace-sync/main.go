@@ -20,11 +20,11 @@ var (
 )
 
 var (
-	hostFlag    = flag.String("host", "", "The host which TXT record is set to an url of links")
-	localSource = flag.String("local", "", "The local source of links")
-	allFlag     = flag.Bool("all", false, "Download all links")
+	hostFlag    = flag.String("host", "", "The host which DNS TXT record points to an url of links.json")
+	localSource = flag.String("local", "", "The local source of links (.json)")
+	allFlag     = flag.Bool("all", false, "Download all links, except skipped ones")
 	nameFlag    = flag.String("name", "", "The name or preffix of the tool to download")
-	updateFlag  = flag.Bool("update", false, "The name or preffix of the tool to download")
+	updateFlag  = flag.Bool("update", false, "Update app with latest release from github.com")
 )
 
 var (
