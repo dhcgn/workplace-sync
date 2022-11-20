@@ -50,6 +50,9 @@ func Download(t string, linksContainer config.LinksContainer) {
 
 	if len(match) != 1 {
 		pterm.Error.Printfln(`Multiple files found with suffix: %v`, t)
+		for _, l := range match {
+			pterm.Error.Printfln(`Found: %v`, l.GetDisplayName())
+		}
 		return
 	}
 
