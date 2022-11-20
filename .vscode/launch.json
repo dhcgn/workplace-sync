@@ -38,7 +38,7 @@
                 "-local",
                 "C:\\DEV\\workplace-sync\\sample.json",
                 "-name",
-                "mkcert"
+                "WinSCP"
             ]
         }
     ]

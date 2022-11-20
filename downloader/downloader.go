@@ -43,6 +43,11 @@ func Get(link config.Link, dir string) error {
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= 400 {
+		return fmt.Errorf("%v: status code %d for %v", link.GetDisplayName(), resp.StatusCode, link.Url)
+	}
 
 	file := path.Base(link.Url)
 
@@ -86,8 +91,6 @@ func Get(link config.Link, dir string) error {
 			return err
 		}
 	}
-
-	defer resp.Body.Close()
 
 	f, err := os.OpenFile(tempDestinationPath, os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
