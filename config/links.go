@@ -20,6 +20,7 @@ type Link struct {
 	Type             string `json:"type"`
 	DecompressFlat   bool   `json:"decompress_flat"`
 	DecompressFilter string `json:"decompress_filter"`
+	Skipped          bool   `json:"skipped"`
 }
 
 func (l *Link) GetDisplayName() string {
