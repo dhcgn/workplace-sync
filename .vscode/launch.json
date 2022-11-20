@@ -9,7 +9,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${fileDirname}",
+            "program": "${workspaceFolder}/cmd/workplace-sync/",
             "args": [
                 "-host",
                 "ws.hdev.io",
@@ -21,7 +21,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/cmd/",
+            "program": "${workspaceFolder}/cmd/workplace-sync/",
             "args": [
                 "-local",
                 "C:\\DEV\\workplace-sync\\sample.json",
@@ -29,14 +29,16 @@
             ]
         },
         {
-            "name": "Local Interactive",
+            "name": "Local install app",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/cmd/",
+            "program": "${workspaceFolder}/cmd/workplace-sync/",
             "args": [
                 "-local",
-                "C:\\DEV\\workplace-sync\\sample.json"
+                "C:\\DEV\\workplace-sync\\sample.json",
+                "-name",
+                "mkcert"
             ]
         }
     ]

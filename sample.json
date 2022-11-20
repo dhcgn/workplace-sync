@@ -121,11 +121,6 @@
             "version": "7.1.0-51"
         },
         {
-            "name": "mkcert",
-            "url": "https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-windows-amd64.exe",
-            "version": "v1.4.4"
-        },
-        {
             "name": "cloc",
             "url": "https://github.com/AlDanial/cloc/releases/download/v1.94/cloc-1.94.exe",
             "version": "v1.94"
