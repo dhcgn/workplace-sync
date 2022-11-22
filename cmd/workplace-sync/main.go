@@ -20,15 +20,22 @@ var (
 )
 
 var (
-	hostFlag    = flag.String("host", "", "The host which DNS TXT record points to an url of links.json")
-	localSource = flag.String("local", "", "The local source of links (.json)")
-	allFlag     = flag.Bool("all", false, "Download all links, except skipped ones")
-	nameFlag    = flag.String("name", "", "The name or preffix of the tool to download")
-	updateFlag  = flag.Bool("update", false, "Update app with latest release from github.com")
+	hostFlag        = flag.String("host", "", "The host which DNS TXT record points to an url of links.json")
+	localSource     = flag.String("local", "", "The local source of links (.json)")
+	allFlag         = flag.Bool("all", false, "Download all links, except skipped ones")
+	nameFlag        = flag.String("name", "", "The name or preffix of the tool to download")
+	updateFlag      = flag.Bool("update", false, "Update app with latest release from github.com")
+	checkUpdateFlag = flag.Bool("checkupdate", false, "Check for update from github.com")
+	versionFlag     = flag.Bool("version", false, "Return version of app")
 )
 
 var (
 	destFolder = config.GetConfig().DestinationFolder
+)
+
+const (
+	updateName       = "dhcgn/workplace-sync"
+	updateAssetRegex = "^ws-.*windows.*zip$"
 )
 
 func main() {
@@ -53,13 +60,39 @@ func main() {
 
 	flag.Parse()
 
-	if *updateFlag {
-		fmt.Println("Checking for updates ... ")
-		err := update.SelfUpdateWithLatestAndRestart("dhcgn/workplace-sync", Version, "^ws-.*windows.*zip$", os.Args[0])
+	if *versionFlag {
+		fmt.Println(Version)
+		return
+	}
 
+	if *checkUpdateFlag {
+		lr, err := update.GetLatestVersion(updateName, Version, updateAssetRegex)
 		if err != nil && err == update.ErrorNoNewVersionFound {
 			fmt.Println("No new version found")
 		} else if err != nil {
+			fmt.Println("ERROR Update:", err)
+		}
+
+		fmt.Printf("Could update from %v to %v, run '-update' to update this app.\n", Version, lr.Version)
+		return
+	}
+
+	if *updateFlag {
+		fmt.Println("Checking for updates ... ")
+
+		lr, err := update.GetLatestVersion(updateName, Version, updateAssetRegex)
+		if err != nil && err == update.ErrorNoNewVersionFound {
+			fmt.Println("No new version found")
+		} else if err != nil {
+			fmt.Println("ERROR Update:", err)
+		}
+
+		fmt.Printf("Update %v to %v\n", Version, lr.Version)
+		fmt.Println("Downloading update ... ")
+
+		err = update.SelfUpdateAndRestart(lr, os.Args[0])
+
+		if err != nil {
 			fmt.Println("ERROR Update:", err)
 		}
 
