@@ -4,8 +4,8 @@ go 1.19
 
 require (
 	github.com/c-bata/go-prompt v0.2.6
-	github.com/dhcgn/gh-update v0.0.0-20221119223901-915f3d95ffcb
-	github.com/pterm/pterm v0.12.49
+	github.com/dhcgn/gh-update v0.0.1
+	github.com/pterm/pterm v0.12.50
 )
 
 require (
@@ -25,7 +25,7 @@ require (
 	github.com/mattn/go-tty v0.0.4 // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
 	github.com/pkg/term v1.2.0-beta.2 // indirect
-	github.com/rivo/uniseg v0.4.2 // indirect
+	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/schollz/progressbar/v3 v3.12.1
 	golang.org/x/exp v0.0.0-20221114191408-850992195362
 	golang.org/x/sys v0.2.0 // indirect
