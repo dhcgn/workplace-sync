@@ -89,6 +89,9 @@
             "name": "restic",
             "url": "https://github.com/restic/restic/releases/download/v0.14.0/restic_0.14.0_windows_amd64.zip",
             "decompress_flat": true,
+            "overwrite_files_names": {
+                "^restic_[0-9\\.]{1,}_windows_amd64.exe$":"restic.exe"
+            },
             "version": "v0.14.0"
         },
         {
@@ -141,6 +144,9 @@
         {
             "name": "cloc",
             "url": "https://github.com/AlDanial/cloc/releases/download/v1.94/cloc-1.94.exe",
+            "overwrite_files_names": {
+                "^cloc-[0-9]{1,}\\.[0-9]{1,}\\.exe$":"cloc.exe"
+            },
             "version": "v1.94"
         },
         {
@@ -180,6 +186,9 @@
         {
             "name": "mkcert",
             "url": "https://dl.filippo.io/mkcert/latest?for=windows/amd64",
+            "overwrite_files_names": {
+                "^mkcert-v[0-9\\.]{1,}-windows-amd64.exe$":"mkcert.exe"
+            },
             "version": "latest"
         },
         {
