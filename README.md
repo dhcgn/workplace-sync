@@ -9,12 +9,14 @@ This tool (under heavy development) downloads files from a list of links. These 
 So I need only this tool on every of my computers to access easy all my tools.
 
 ```
-Workplace Sync v0.0.10 (2022-11-20T19:47:36Z go1.19.2)
+Workplace Sync v0.0.12 (2022-11-22T20:10:06Z go1.19.2)
 https://github.com/dhcgn/workplace-sync
 
 host or localSource is required
   -all
         Download all links, except skipped ones
+  -checkupdate
+        Check for update from github.com
   -host string
         The host which DNS TXT record points to an url of links.json
   -local string
@@ -23,6 +25,21 @@ host or localSource is required
         The name or preffix of the tool to download
   -update
         Update app with latest release from github.com
+  -version
+        Return version of app
+```
+
+## Optional Powershell Profile
+
+```powershell
+# code $PROFILE
+if (Test-Path -Path c:\ws\) {
+    Get-ChildItem c:\ws\ -Filter *.exe | ForEach-Object{
+        $name = $_.Name
+        $name = $name.Replace(".exe", "")
+        New-Alias -Name $name -Value $_.FullName
+    }
+}
 ```
 
 ## Demo
