@@ -124,7 +124,7 @@ func main() {
 
 	var linksContainer config.LinksContainer
 	if *hostFlag != "" {
-		pterm.Info.Printfln("Optain links from DNS TXT record of %v", *hostFlag)
+		pterm.Info.Printfln("Obtain links from DNS TXT record of %v", *hostFlag)
 		l, err := linkscontainer.GetLinksDNS(*hostFlag)
 		if err != nil {
 			fmt.Println(err)
@@ -132,7 +132,7 @@ func main() {
 		}
 		linksContainer = l
 	} else {
-		pterm.Info.Printfln("Optain links from local file %v", *localSource)
+		pterm.Info.Printfln("Obtain links from local file %v", *localSource)
 		l, err := linkscontainer.GetLinksLocal(*localSource)
 		if err != nil {
 			fmt.Println(err)
