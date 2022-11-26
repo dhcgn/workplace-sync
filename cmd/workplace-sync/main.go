@@ -68,12 +68,15 @@ func main() {
 	if *checkUpdateFlag {
 		lr, err := update.GetLatestVersion(updateName, Version, updateAssetRegex)
 		if err != nil && err == update.ErrorNoNewVersionFound {
-			fmt.Println("No new version found")
+			fmt.Printf("No new version found for %v\n", Version)
+			return
 		} else if err != nil {
 			fmt.Println("ERROR Update:", err)
+			return
 		}
 
 		fmt.Printf("Could update from %v to %v, run '-update' to update this app.\n", Version, lr.Version)
+
 		return
 	}
 
@@ -82,9 +85,11 @@ func main() {
 
 		lr, err := update.GetLatestVersion(updateName, Version, updateAssetRegex)
 		if err != nil && err == update.ErrorNoNewVersionFound {
-			fmt.Println("No new version found")
+			fmt.Printf("No new version found for %v\n", Version)
+			return
 		} else if err != nil {
 			fmt.Println("ERROR Update:", err)
+			return
 		}
 
 		fmt.Printf("Update %v to %v\n", Version, lr.Version)
