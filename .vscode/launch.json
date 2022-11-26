@@ -17,15 +17,14 @@
             ]
         },
         {
-            "name": "Local",
+            "name": "Local Interactive",
             "type": "go",
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/workplace-sync/",
             "args": [
                 "-local",
-                "C:\\DEV\\workplace-sync\\sample.json",
-                "-all"
+                "C:\\DEV\\workplace-sync\\sample.json"
             ]
         },
         {
@@ -39,6 +38,16 @@
                 "C:\\DEV\\workplace-sync\\sample.json",
                 "-name",
                 "WinSCP"
+            ]
+        },
+        {
+            "name": "Update",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/workplace-sync/",
+            "args": [
+                "-update"
             ]
         }
     ]
