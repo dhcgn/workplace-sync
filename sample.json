@@ -164,7 +164,8 @@
         {
             "name": "Everything portable",
             "url": "https://www.voidtools.com/Everything-1.4.1.1022.x64.zip",
-            "version": "1.4.1.1022"
+            "version": "1.4.1.1022",
+            "decompress_flat": true
         },
         {
             "name": "Wireguard",
