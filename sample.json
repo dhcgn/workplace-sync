@@ -219,6 +219,12 @@
             "url": "https://www.sumatrapdfreader.org/dl/rel/3.4.6/SumatraPDF-3.4.6-64.zip",
             "decompress_flat": true,
             "version": "3.4.6"
+        },
+        {
+            "name": "vlc",
+            "url": "https://get.videolan.org/vlc/3.0.18/win32/vlc-3.0.18-win32.exe",
+            "version": "3.0.18",
+            "type": "installer"
         }
     ],
     "last_modified": "2022-11-19T22:49:05.718215Z"
