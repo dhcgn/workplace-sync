@@ -137,9 +137,9 @@
         },
         {
             "name": "ImageMagick",
-            "url": "https://imagemagick.org/archive/binaries/ImageMagick-7.1.0-51-Q16-x64-static.exe",
-            "type": "installer",
-            "version": "7.1.0-51"
+            "url": "https://imagemagick.org/archive/binaries/ImageMagick-7.1.0-portable-Q16-x64.zip",
+            "version": "7.1.0",
+            "skipped": true
         },
         {
             "name": "cloc",
@@ -159,6 +159,11 @@
             "name": "Everything",
             "url": "https://www.voidtools.com/Everything-1.4.1.1022.x64-Setup.exe",
             "type": "installer",
+            "version": "1.4.1.1022"
+        },
+        {
+            "name": "Everything portable",
+            "url": "https://www.voidtools.com/Everything-1.4.1.1022.x64.zip",
             "version": "1.4.1.1022"
         },
         {
@@ -196,6 +201,24 @@
             "url": "https://github.com/git-for-windows/git/releases/download/v2.38.1.windows.1/Git-2.38.1-64-bit.exe",
             "type": "installer",
             "version": "v2.38.1"
+        },
+        {
+            "name": "rufus",
+            "url": "https://github.com/pbatard/rufus/releases/download/v3.20/rufus-3.20p.exe",
+            "version": "v3.20"
+        },
+        {
+            "name": "cpu-z",
+            "url": "https://download.cpuid.com/cpu-z/cpu-z_2.03-en.zip",
+            "decompress_flat": true,
+            "decompress_filter": "^cpuz_x64\\.exe$",
+            "version": "2.03"
+        },
+        {
+            "name": "SumatraPDF",
+            "url": "https://www.sumatrapdfreader.org/dl/rel/3.4.6/SumatraPDF-3.4.6-64.zip",
+            "decompress_flat": true,
+            "version": "3.4.6"
         }
     ],
     "last_modified": "2022-11-19T22:49:05.718215Z"
