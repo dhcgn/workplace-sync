@@ -244,6 +244,12 @@
             "url": "https://www.netlimiter.com/download/nl/netlimiter-5.1.5.0.exe",
             "version": "5.1.5.0",
             "type": "installer"
+        },
+        {
+            "name": "bitwarden",
+            "url": "https://vault.bitwarden.com/download/?app=desktop&platform=windows",
+            "version": "latest",
+            "type": "installer"
         }
     ],
     "last_modified": "2022-12-02T08:26:11.4038694Z"
