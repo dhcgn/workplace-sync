@@ -193,11 +193,6 @@
             "version": "v2.38.1"
         },
         {
-            "name": "rufus",
-            "url": "https://github.com/pbatard/rufus/releases/download/v3.20/rufus-3.20p.exe",
-            "version": "v3.20"
-        },
-        {
             "name": "cpu-z",
             "url": "https://download.cpuid.com/cpu-z/cpu-z_2.03-en.zip",
             "decompress_flat": true,
@@ -238,6 +233,13 @@
             "name": "bitwarden",
             "url": "https://vault.bitwarden.com/download/?app=desktop&platform=windows",
             "version": "latest",
+            "type": "installer"
+        },
+        {
+            "name": "rufus",
+            "url": "https://github.com/pbatard/rufus/releases/download/v3.21/rufus-3.21p.exe",
+            "version": "3.21",
+            "skipped": true,
             "type": "installer"
         }
     ],
