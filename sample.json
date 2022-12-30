@@ -241,6 +241,14 @@
             "version": "3.21",
             "skipped": true,
             "type": "installer"
+        },
+        {
+            "name": "gokey",
+            "url": "https://github.com/cloudflare/gokey/releases/download/v0.1.2/gokey-v0.1.2-windows-amd64.exe",
+            "overwrite_files_names": {
+                "^gokey-v[0-9\\.]{1,}-windows-amd64.exe$":"gokey.exe"
+            },
+            "version": "0.1.2"
         }
     ],
     "last_modified": "2022-12-02T08:26:11.4038694Z"
