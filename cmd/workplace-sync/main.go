@@ -30,7 +30,8 @@ var (
 )
 
 var (
-	destFolder = config.GetConfig().DestinationFolder
+	destFolder     = config.GetConfig().DestinationFolder
+	forceHashCheck = config.GetConfig().ForceHashCheck
 )
 
 const (
@@ -141,7 +142,24 @@ func main() {
 		linksContainer = l
 	}
 
-	pterm.Success.Printfln("Got %v links", len(linksContainer.Links))
+	if forceHashCheck {
+		var filteredLinksContainer config.LinksContainer
+		for _, l := range linksContainer.Links {
+			if l.Hash == "" {
+				pterm.Warning.Printfln("Link %v (%v) has no hash, will be removed because ForceHashCheck is active", l.GetDisplayName(), l.Version)
+			} else {
+				filteredLinksContainer.Links = append(filteredLinksContainer.Links, l)
+			}
+		}
+		linksContainer = filteredLinksContainer
+	}
+
+	if len(linksContainer.Links) == 0 {
+		pterm.Error.Printfln("No links found")
+		return
+	} else {
+		pterm.Success.Printfln("Got %v links", len(linksContainer.Links))
+	}
 
 	pterm.Info.Printfln("Use download folder %v", destFolder)
 	err := createDownloadFolder(destFolder)
@@ -163,10 +181,13 @@ func main() {
 				continue
 			}
 
-			err := downloader.Get(l, destFolder)
+			hash, err := downloader.Get(l, destFolder)
 			if err != nil {
 				pterm.Error.Printfln("link %v, folder: %v, error: %v", l.Url, destFolder, err)
 				continue
+			}
+			if l.Hash == "" {
+				interaction.PrintHashWarning(l.GetDisplayName(), hash)
 			}
 		}
 		return

@@ -2,6 +2,7 @@ package downloader
 
 import (
 	"archive/zip"
+	"crypto/sha256"
 	"fmt"
 	"io"
 	"net/http"
@@ -34,19 +35,19 @@ func adjustOverwriteFilesNames(target string, filter map[string]string) (string,
 	return target, nil
 }
 
-func Get(link config.Link, dir string) error {
+func Get(link config.Link, dir string) (string, error) {
 	req, err := http.NewRequest("GET", link.Url, nil)
 	if err != nil {
-		return err
+		return "", err
 	}
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return err
+		return "", err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		return fmt.Errorf("%v: status code %d for %v", link.GetDisplayName(), resp.StatusCode, link.Url)
+		return "", fmt.Errorf("%v: status code %d for %v", link.GetDisplayName(), resp.StatusCode, link.Url)
 	}
 
 	file := path.Base(link.Url)
@@ -71,7 +72,7 @@ func Get(link config.Link, dir string) error {
 		if _, err := os.Stat(installerFolder); os.IsNotExist(err) {
 			err := os.Mkdir(installerFolder, 0755)
 			if err != nil {
-				return err
+				return "", err
 			}
 		}
 		target = filepath.Join(installerFolder, file)
@@ -79,7 +80,7 @@ func Get(link config.Link, dir string) error {
 
 	target, err = adjustOverwriteFilesNames(target, link.OverwriteFilesNames)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	tempDestinationPath := target + ".tmp"
@@ -88,32 +89,38 @@ func Get(link config.Link, dir string) error {
 	if err == nil {
 		err = os.Remove(tempDestinationPath)
 		if err != nil {
-			return err
+			return "", err
 		}
 	}
 
 	f, err := os.OpenFile(tempDestinationPath, os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	bar := progressbar.DefaultBytes(
 		resp.ContentLength,
 		file,
 	)
-	_, err = io.Copy(io.MultiWriter(f, bar), resp.Body)
+	hash := sha256.New()
+	_, err = io.Copy(io.MultiWriter(f, bar, hash), resp.Body)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	err = f.Close()
 	if err != nil {
-		return err
+		return "", err
+	}
+
+	sum := fmt.Sprintf("%x", hash.Sum(nil))
+	if link.Hash != "" && link.Hash != sum {
+		return sum, fmt.Errorf("%v: hash mismatch for %v. Expected %v, actual %v", link.GetDisplayName(), link.Url, link.Hash[0:12], sum[0:12])
 	}
 
 	err = os.Rename(tempDestinationPath, target)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if filepath.Ext(target) == ".zip" {
@@ -125,26 +132,26 @@ func Get(link config.Link, dir string) error {
 
 			err := os.RemoveAll(decompressFolder)
 			if err != nil {
-				return err
+				return "", err
 			}
 
 			if _, err = os.Stat(decompressFolder); os.IsNotExist(err) {
 				err = os.Mkdir(decompressFolder, 0755)
 				if err != nil {
-					return err
+					return "", err
 				}
 			}
 		}
 
 		_, err = unzip(target, decompressFolder, link)
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		os.Remove(target)
 	}
 
-	return nil
+	return sum, nil
 }
 
 func unzip(src string, destination string, link config.Link) ([]string, error) {
