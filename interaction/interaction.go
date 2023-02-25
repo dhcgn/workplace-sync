@@ -32,9 +32,12 @@ func Download(t string, linksContainer config.LinksContainer) {
 	}
 
 	if len(found) == 1 {
-		err := downloader.Get(found[0], config.GetConfig().DestinationFolder)
+		sum, err := downloader.Get(found[0], config.GetConfig().DestinationFolder)
 		if err != nil {
 			pterm.Error.Print(err)
+		}
+		if found[0].Hash == "" {
+			PrintHashWarning(found[0].GetDisplayName(), sum)
 		}
 		return
 	}
@@ -58,10 +61,17 @@ func Download(t string, linksContainer config.LinksContainer) {
 
 	pterm.Success.Printfln("Found file %v", match[0].GetDisplayName())
 
-	err := downloader.Get(match[0], config.GetConfig().DestinationFolder)
+	sum, err := downloader.Get(match[0], config.GetConfig().DestinationFolder)
 	if err != nil {
 		pterm.Error.Print(err)
 	}
+	if match[0].Hash == "" {
+		PrintHashWarning(match[0].GetDisplayName(), sum)
+	}
+}
+
+func PrintHashWarning(name string, hash string) {
+	pterm.Warning.Printfln("No hash check for %v, downloaded content hash was %v", name, hash)
 }
 
 func PromptAndDownload(linksContainer config.LinksContainer) {

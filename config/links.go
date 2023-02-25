@@ -18,6 +18,7 @@ type Link struct {
 	Url                 string            `json:"url"`
 	Version             string            `json:"version"`
 	Type                string            `json:"type"`
+	Hash                string            `json:"hash"`
 	DecompressFlat      bool              `json:"decompress_flat"`
 	DecompressFilter    string            `json:"decompress_filter"`
 	Skipped             bool              `json:"skipped"`
