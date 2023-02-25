@@ -115,6 +115,8 @@ func Get(link config.Link, dir string) (string, error) {
 
 	sum := fmt.Sprintf("%x", hash.Sum(nil))
 	if link.Hash != "" && link.Hash != sum {
+		// TODO handle this error
+		_ = os.Remove(tempDestinationPath)
 		return sum, fmt.Errorf("%v: hash mismatch for %v. Expected %v, actual %v", link.GetDisplayName(), link.Url, link.Hash[0:12], sum[0:12])
 	}
 

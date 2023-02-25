@@ -8,6 +8,6 @@ type Config struct {
 func GetConfig() Config {
 	return Config{
 		DestinationFolder: `c:\ws\`,
-		ForceHashCheck:    true,
+		ForceHashCheck:    false,
 	}
 }

@@ -110,6 +110,7 @@
             "name": "WinSCP",
             "url": "https://deac-ams.dl.sourceforge.net/project/winscp/WinSCP/5.21.5/WinSCP-5.21.5-Setup.exe",
             "type": "installer",
+            "hash": "e141e9a1a0094095d5e26077311418a01dac429e68d3ff07a734385eb0172bea",
             "version": "5.21.5"
         },
         {
