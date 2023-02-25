@@ -2,16 +2,19 @@
     "links": [
         {
             "url": "https://download.sysinternals.com/files/SysinternalsSuite.zip",
+            "hash":"56e72eee9f3df153a702be5eeeaa3293560792d89e8824d26a182146f6e35aa9",
             "version": "latest"
         },
         {
             "name": "winbox",
             "url": "https://mt.lv/winbox64",
+            "hash": "abe696e45809f26b0320926a0014d3088dcc5ac43d553a2b7a4e25f54a047439",
             "version": "latest"
         },
         {
             "name": "zstd",
             "url": "https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-v1.5.2-win64.zip",
+            "hash": "68897cd037ee5e44c6d36b4dbbd04f1cc4202f9037415a3251951b953a257a09",
             "decompress_flat": true,
             "decompress_filter": "\\.exe$",
             "version": "v1.5.2"
@@ -19,6 +22,7 @@
         {
             "name": "jxl",
             "url": "https://github.com/libjxl/libjxl/releases/download/v0.7.0/jxl-x64-windows-static.zip",
+            "hash": "19d4cf75fe0ffbad1b94ebbfd261978223dad0a0dfbb146878f3c4feb8a8e54e",
             "decompress_flat": true,
             "decompress_filter": "\\.exe$|\\.dll$",
             "version": "v0.7.0"
@@ -26,6 +30,7 @@
         {
             "name": "upx",
             "url": "https://github.com/upx/upx/releases/download/v4.0.0/upx-4.0.0-win64.zip",
+            "hash":"a0fe01d06dadc5ca551e531ba684bf5f39269170af8dcfdc161e45caf077c4ef",
             "decompress_flat": true,
             "decompress_filter": "\\.exe$",
             "version": "4.0.0"
@@ -33,6 +38,7 @@
         {
             "name": "age",
             "url": "https://github.com/FiloSottile/age/releases/download/v1.1.1/age-v1.1.1-windows-amd64.zip",
+            "hash":"9038bd9d76ee65fe6b303d905c19488af098b8c8b29f4e408fe44cd03f13700b",
             "decompress_flat": true,
             "decompress_filter": "\\.exe$",
             "version": "v1.1.1"
@@ -40,23 +46,27 @@
         {
             "name": "age-plugin-yubikey",
             "url": "https://github.com/str4d/age-plugin-yubikey/releases/download/v0.3.1/age-plugin-yubikey-v0.3.1-x86_64-windows.zip",
+            "hash": "56ebbc1c9e06d22d0baf285a1cdc3c1c146069d31862686b4fc848cf729fa4c5",
             "decompress_flat": true,
             "version": "v0.3.1"
         },
         {
             "name": "minisign",
             "url": "https://github.com/jedisct1/minisign/releases/download/0.10/minisign-0.10-win64.zip",
+            "hash":"a8a62e675ffe6551e689bfdd6bc4f667939092ca71a18eb53a04484493a275a4",
             "decompress_flat": true,
             "version": "0.10"
         },
         {
             "name": "OOSU10",
             "url": "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe",
+            "hash": "d2b99302d0acdf47256a654c28d20f9730175125d8c66bee2074c7357a8f50e2",
             "version": "10"
         },
         {
             "name": "7z",
             "url": "https://www.7-zip.org/a/7z2201-x64.exe",
+            "hash":"b055fee85472921575071464a97a79540e489c1c3a14b9bdfbdbab60e17f36e4",
             "version": "22.01",
             "type": "installer"
         },
@@ -71,12 +81,14 @@
         {
             "name": "vscode",
             "url": "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user",
+            "hash":"d7a5b86616c221d872cd781fb9c6a886ffbf2233292a8a39067cddad9574a59e",
             "type": "installer",
             "version": "latest"
         },
         {
             "name": "restic",
             "url": "https://github.com/restic/restic/releases/download/v0.14.0/restic_0.14.0_windows_amd64.zip",
+            "hash": "e1d81195194f684a0df34da1b4ff305d1c033283521c02f36a6f5cdeffcd6f2d",
             "decompress_flat": true,
             "overwrite_files_names": {
                 "^restic_[0-9\\.]{1,}_windows_amd64.exe$":"restic.exe"
@@ -85,24 +97,28 @@
         },
         {
             "name": "SciTE",
+            "hash":"4bec929b7337ebb700a8371a270a7d9d97b30f086c091dbc2aeb2c591fd01c43",
             "url": "https://www.scintilla.org/Sc531.exe",
             "version": "531"
         },
         {
             "name": "Wireshark",
-            "url": "https://1.eu.dl.wireshark.org/win64/Wireshark-win64-4.0.1.exe",
+            "url": "https://1.eu.dl.wireshark.org/win64/Wireshark-win64-latest.exe",
+            "hash":"26feddeb71571e63851c10c16325bd1d19e0175088c0e2732ef25f586b560fe7",
             "type": "installer",
             "version": "4.0.1"
         },
         {
             "name": "nmap",
             "url": "https://nmap.org/dist/nmap-7.93-setup.exe",
+            "hash":"f1160a33fb79c764cdc4c023fa700054ae2945ed91880e37348a17c010ca716f",
             "type": "installer",
             "version": "7.93"
         },
         {
             "name": "vt-cli",
             "url": "https://github.com/VirusTotal/vt-cli/releases/download/0.10.4/Windows64.zip",
+            "hash":"97ddbc169da118f6416cb4269b4c87fa44023c7b66e98cc60b7953bea45d0303",
             "decompress_flat": true,
             "version": "0.10.4"
         },
@@ -110,17 +126,20 @@
             "name": "WinSCP",
             "url": "https://deac-ams.dl.sourceforge.net/project/winscp/WinSCP/5.21.5/WinSCP-5.21.5-Setup.exe",
             "type": "installer",
+            "hash": "e141e9a1a0094095d5e26077311418a01dac429e68d3ff07a734385eb0172bea",
             "version": "5.21.5"
         },
         {
             "name": "notepad-plus-plus",
             "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.4.6/npp.8.4.6.Installer.x64.exe",
+            "hash": "7e33c60a78c48d0f899d9d8c3980deecf5c7ae8bbff742c77d5bc35794728594",
             "type": "installer",
             "version": "v8.4.6"
         },
         {
             "name": "Obsidian",
             "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.0.3/Obsidian.1.0.3.exe",
+            "hash":"deed7e9104e50f274026a96728d9f4bcaf1fe4cafc7692ac43c87f72d2bd53ba",
             "type": "installer",
             "version": "1.0.3"
         },
@@ -133,6 +152,7 @@
         {
             "name": "cloc",
             "url": "https://github.com/AlDanial/cloc/releases/download/v1.94/cloc-1.94.exe",
+            "hash":"b48a6002fb75fa66ec5d0c05a5c4d51f2ad22b5b025b7eb4e3945d18419c0952",
             "overwrite_files_names": {
                 "^cloc-[0-9]{1,}\\.[0-9]{1,}\\.exe$":"cloc.exe"
             },
@@ -141,46 +161,54 @@
         {
             "name": "paint.net",
             "url": "https://www.dotpdn.com/files/paint.net.4.3.12.install.anycpu.web.zip",
+            "hash":"1d3dd122abcb95e3250b75f699b44aa45ed514f5c3d087a03fdb80f0429e89e0",
             "type": "installer",
             "version": "4.3.12"
         },
         {
             "name": "Everything",
             "url": "https://www.voidtools.com/Everything-1.4.1.1022.x64-Setup.exe",
+            "hash":"488d285760eb1aeb148e2aec18a2f063571a6630acb26a02b6751c56ca4a95be",
             "type": "installer",
             "version": "1.4.1.1022"
         },
         {
             "name": "Everything portable",
             "url": "https://www.voidtools.com/Everything-1.4.1.1022.x64.zip",
+            "hash":"c718bcd73d341e64c8cb47e97eb0c45d010fdcc45c2488d4a3a3c51acc775889",
             "version": "1.4.1.1022",
             "decompress_flat": true
         },
         {
             "name": "Wireguard",
             "url": "https://download.wireguard.com/windows-client/wireguard-installer.exe",
+            "hash": "eeee2b0a6ad1c7e4614fed4dfbe58b63776f6a3a6758267b5a976b4dc4315f48",
             "type": "installer",
             "version": "latest"
         },
         {
             "name": "BeyondCompare",
             "url": "https://scootersoftware.com/BCompare-4.4.4.27058.exe",
+            "hash":"51809707d0d9809577576978094fdca6e2c9bd8af8af800d6b4b38234f9f2ffc",
             "type": "installer",
             "version": "4.4.4.27058"
         },
         {
             "name": "putty",
             "url": "https://the.earth.li/~sgtatham/putty/latest/w64/putty.exe",
+            "hash":"fc6f9dbdf4b9f8dd1f5f3a74cb6e55119d3fe2c9db52436e10ba07842e6c3d7c",
             "version": "latest"
         },
         {
             "name": "puttygen",
             "url": "https://the.earth.li/~sgtatham/putty/latest/w64/puttygen.exe",
+            "hash":"2339389cd0ab813d97300b8bb2f5757f82a18e5e1bb112c698d87ce6fcce7277",
             "version": "latest"
         },
         {
             "name": "mkcert",
             "url": "https://dl.filippo.io/mkcert/latest?for=windows/amd64",
+            "hash": "d2660b50a9ed59eada480750561c96abc2ed4c9a38c6a24d93e30e0977631398",
             "overwrite_files_names": {
                 "^mkcert-v[0-9\\.]{1,}-windows-amd64.exe$":"mkcert.exe"
             },
@@ -189,12 +217,14 @@
         {
             "name": "git",
             "url": "https://github.com/git-for-windows/git/releases/download/v2.38.1.windows.1/Git-2.38.1-64-bit.exe",
+            "hash":"f3fe05e65cd7e9a9126784d4ad57fdf979d30d5987fe849af4348dbe3e284df6",
             "type": "installer",
             "version": "v2.38.1"
         },
         {
             "name": "cpu-z",
             "url": "https://download.cpuid.com/cpu-z/cpu-z_2.03-en.zip",
+            "hash":"dc4ca12f4154095169d39fdc8ecf1a66386654f91abd438415dcc4dbcb69cf41",
             "decompress_flat": true,
             "decompress_filter": "^cpuz_x64\\.exe$",
             "version": "2.03"
@@ -202,23 +232,27 @@
         {
             "name": "SumatraPDF",
             "url": "https://www.sumatrapdfreader.org/dl/rel/3.4.6/SumatraPDF-3.4.6-64.zip",
+            "hash":"2bb05aa8b74bc748bc1f6a2b6f6ec4ba22bd5b1eaeec767d0a7f97cfd436d40d",
             "decompress_flat": true,
             "version": "3.4.6"
         },
         {
             "name": "vlc",
             "url": "https://get.videolan.org/vlc/3.0.18/win32/vlc-3.0.18-win32.exe",
+            "hash": "f4baaa8135e0f9a993f0258a4d095db475096896bd3adb48369f1f70c1f0d9d4",
             "version": "3.0.18",
             "type": "installer"
         },
         {
             "name": "ShareX",
             "url": "https://github.com/ShareX/ShareX/releases/download/v14.1.0/ShareX-14.1.0-portable.zip",
+            "hash":"ebdd885dd6d6395fe0b59c4ee252f7dd10d9486acf734e9317c56e3a51562e54",
             "version": "14.1.0"
         },
         {
             "name": "PowerToys",
             "url": "https://github.com/microsoft/PowerToys/releases/download/v0.64.1/PowerToysSetup-0.64.1-x64.exe",
+            "hash":"4bec929b7337ebb700a8371a270a7d9d97b30f086c091dbc2aeb2c591fd01c43",
             "version": "0.64.1",
             "skipped": true,
             "type": "installer"
@@ -226,12 +260,14 @@
         {
             "name": "netlimiter",
             "url": "https://www.netlimiter.com/download/nl/netlimiter-5.1.5.0.exe",
+            "hash": "097e49bdef33057d42169f2c6bbd362f00241e87e84385946c786c106ac3e75c",
             "version": "5.1.5.0",
             "type": "installer"
         },
         {
             "name": "bitwarden",
             "url": "https://vault.bitwarden.com/download/?app=desktop&platform=windows",
+            "hash":"14e22c9d78fe1da0a206fc3b6e88c24d8372f6ac62b7275f64b677c4a0a83dd4",
             "version": "latest",
             "type": "installer"
         },
@@ -245,6 +281,7 @@
         {
             "name": "gokey",
             "url": "https://github.com/cloudflare/gokey/releases/download/v0.1.2/gokey-v0.1.2-windows-amd64.exe",
+            "hash":"d3be818a3c4ff3da076db820ac7a2afb21dd72c570c720cc99925be3bbceae69",
             "overwrite_files_names": {
                 "^gokey-v[0-9\\.]{1,}-windows-amd64.exe$":"gokey.exe"
             },
