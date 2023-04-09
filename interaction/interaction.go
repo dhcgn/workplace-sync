@@ -34,7 +34,8 @@ func Download(t string, linksContainer config.LinksContainer) {
 	if len(found) == 1 {
 		sum, err := downloader.Get(found[0], config.GetConfig().DestinationFolder)
 		if err != nil {
-			pterm.Error.Print(err)
+			pterm.Error.Println(err)
+			return
 		}
 		if found[0].Hash == "" {
 			PrintHashWarning(found[0].GetDisplayName(), sum)
