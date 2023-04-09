@@ -251,9 +251,9 @@
         },
         {
             "name": "PowerToys",
-            "url": "https://github.com/microsoft/PowerToys/releases/download/v0.64.1/PowerToysSetup-0.64.1-x64.exe",
-            "hash": "4bec929b7337ebb700a8371a270a7d9d97b30f086c091dbc2aeb2c591fd01c43",
-            "version": "0.64.1",
+            "url": "https://github.com/microsoft/PowerToys/releases/download/v0.69.0/PowerToysSetup-0.69.0-x64.exe",
+            "hash": "ade1e56df8cc52839fbd9db6a0bcf34e38b88aaa52544eead3c1bb023fdaf29a",
+            "version": "0.69.0",
             "skipped": true,
             "type": "installer"
         },
@@ -334,7 +334,28 @@
             "overwrite_files_names": {
                 "^rustdesk-[0-9\\.]{1,}exe$": "rustdesk.exe"
             }
+        },
+        {
+            "name": "Cyberduck",
+            "url": "https://update.cyberduck.io/windows/Cyberduck-Installer-8.5.8.39606.exe",
+            "hash": "a659cd7cf248a9c301ae584bcf02f4e99e6b706fe9c07e4c4d1bb126d417e929",
+            "version": "8.5.8.3960",
+            "type": "installer"
+        },
+        {
+            "name": "Cyberduck CLI",
+            "url": "https://dist.duck.sh/duck-8.5.8.39606.exe",
+            "hash": "44a196df0a5e0577b20439de6b9cd32c894260406c0066172475f5c942cba241",
+            "version": "8.5.8.39606",
+            "type": "installer"
+        },
+        {
+            "name": "Mountain Duck",
+            "url": "https://dist.mountainduck.io/Mountain%20Duck%20Installer-4.13.7.21182.exe",
+            "hash": "232128dc5eee9b5665b4f01f84ae6164b9379b4cd9e36bdedda0e08b02fdd44c",
+            "version": "4.13.7.21182",
+            "type": "installer"
         }
     ],
-    "last_modified": "2022-12-30T15:39:31.5471744Z"
+    "last_modified": "2023-04-09T15:39:31.5471744Z"
 }
