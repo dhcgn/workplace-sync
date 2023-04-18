@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"time"
 
 	"github.com/dhcgn/workplace-sync/config"
 )
@@ -46,11 +47,29 @@ func GetLinksDNS(host string) (config.LinksContainer, error) {
 		return config.LinksContainer{}, err
 	}
 
-	resp, err := http.Get(u)
+	client := http.Client{
+		Timeout: 5 * time.Second,
+	}
+
+	url, err := url.Parse(u)
+	if err != nil {
+		return config.LinksContainer{}, err
+	}
+
+	r := &http.Request{
+		Method: "GET",
+		URL:    url,
+	}
+	r.Header = map[string][]string{
+		"Accept-Encoding": {"gzip, deflate"},
+	}
+
+	resp, err := client.Do(r)
 	if err != nil {
 		return config.LinksContainer{}, err
 	}
 	defer resp.Body.Close()
+
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return config.LinksContainer{}, err
