@@ -5,15 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Online",
+            "name": "Online Interactive",
             "type": "go",
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/workplace-sync/",
             "args": [
                 "-host",
-                "ws.hdev.io",
-                "-all"
+                "ws.hdev.io"
             ]
         },
         {

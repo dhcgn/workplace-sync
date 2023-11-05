@@ -60,9 +60,6 @@ func GetLinksDNS(host string) (config.LinksContainer, error) {
 		Method: "GET",
 		URL:    url,
 	}
-	r.Header = map[string][]string{
-		"Accept-Encoding": {"gzip, deflate"},
-	}
 
 	resp, err := client.Do(r)
 	if err != nil {
