@@ -9,6 +9,7 @@ import (
 )
 
 type LinksContainer struct {
+	MinVersion   string    `json:"min_version"`
 	Links        []Link    `json:"links"`
 	LastModified time.Time `json:"last_modified"`
 }

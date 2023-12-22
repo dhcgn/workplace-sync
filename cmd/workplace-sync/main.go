@@ -13,6 +13,7 @@ import (
 	"github.com/dhcgn/workplace-sync/downloader"
 	"github.com/dhcgn/workplace-sync/interaction"
 	"github.com/dhcgn/workplace-sync/linkscontainer"
+	"golang.org/x/mod/semver"
 
 	"github.com/pterm/pterm"
 )
@@ -132,6 +133,8 @@ func main() {
 		return
 	}
 
+	checkMinVersion(linksContainer.MinVersion, Version)
+
 	infos, warns, errors, err := checkAndFilterLinksContainer(&linksContainer, forceHashCheck, *checkLinksFlag)
 	if err != nil {
 		pterm.Error.Printfln("Error checking links: %v", err)
@@ -204,6 +207,26 @@ func main() {
 
 	fmt.Println()
 	fmt.Println("Done")
+}
+
+func checkMinVersion(minVersion, currentVersion string) {
+	if minVersion == "" || minVersion == "dev" {
+		return
+	}
+
+	if !semver.IsValid(minVersion) {
+		pterm.Error.Printfln("Remote repo has invalid min_version: %v. File could be incompatible.", minVersion)
+		return
+	}
+
+	if !semver.IsValid(currentVersion) {
+		pterm.Error.Printfln("App has invalid version: %v", currentVersion)
+		return
+	}
+
+	if semver.Compare(minVersion, currentVersion) > 0 {
+		pterm.Error.Printfln("Current version %v is lower than remote repo min_version %v. File could be incompatible.", currentVersion, minVersion)
+	}
 }
 
 var (

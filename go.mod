@@ -28,6 +28,7 @@ require (
 	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/schollz/progressbar/v3 v3.12.1
 	golang.org/x/exp v0.0.0-20221114191408-850992195362
+	golang.org/x/mod v0.14.0
 	golang.org/x/sys v0.2.0 // indirect
 	golang.org/x/term v0.2.0 // indirect
 )
