@@ -37,17 +37,6 @@ jobs:
           mkdir "$DIR/ws"
           go build -o "$DIR/ws" -ldflags "-w -s -X main.Version=$VERSION" -trimpath ./cmd/...
           if [ "$GOOS" == "windows" ]; then
-            sudo apt-get update && sudo apt-get install -y osslsigncode
-            if [ -n "${{ secrets.SIGN_PASS }}" ]; then
-              for exe in "$DIR"/ws/*.exe; do
-                /usr/bin/osslsigncode sign -t "http://timestamp.comodoca.com" \
-                  -certs .github/workflows/certs/sertigo_dh.cer \
-                  -key .github/workflows/certs/sertigo_dh.encrypted.key \
-                  -pass "${{ secrets.SIGN_PASS }}" \
-                  -n ws -in "$exe" -out "$exe.signed"
-                mv "$exe.signed" "$exe"
-              done
-            fi
             ( cd "$DIR/ws"; zip ws.zip * )
             mv "$DIR/ws/ws.zip" "ws-$VERSION-$GOOS-$GOARCH.zip"
           else
