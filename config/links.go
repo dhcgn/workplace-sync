@@ -14,15 +14,16 @@ type LinksContainer struct {
 }
 
 type Link struct {
-	Name                string            `json:"name"`
-	Url                 string            `json:"url"`
-	Version             string            `json:"version"`
-	Type                string            `json:"type"`
-	Hash                string            `json:"hash"`
-	DecompressFlat      bool              `json:"decompress_flat"`
-	DecompressFilter    string            `json:"decompress_filter"`
-	Skipped             bool              `json:"skipped"`
-	OverwriteFilesNames map[string]string `json:"overwrite_files_names"`
+	Name                     string            `json:"name"`
+	Url                      string            `json:"url"`
+	Version                  string            `json:"version"`
+	Type                     string            `json:"type"`
+	Hash                     string            `json:"hash"`
+	DecompressFlat           bool              `json:"decompress_flat"`
+	DecompressFilter         string            `json:"decompress_filter"`
+	Skipped                  bool              `json:"skipped"`
+	OverwriteFilesNames      map[string]string `json:"overwrite_files_names"`
+	GithubReleaseAssetFilter string            `json:"github_release_asset_filter"`
 }
 
 func (l *Link) GetDisplayName() string {
