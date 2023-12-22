@@ -1,4 +1,5 @@
 {
+    "min_version": "v0.0.17",
     "links": [
         {
             "url": "https://download.sysinternals.com/files/SysinternalsSuite.zip",
@@ -37,11 +38,10 @@
         },
         {
             "name": "age",
-            "url": "https://github.com/FiloSottile/age/releases/download/v1.1.1/age-v1.1.1-windows-amd64.zip",
-            "hash": "9038bd9d76ee65fe6b303d905c19488af098b8c8b29f4e408fe44cd03f13700b",
+            "url": "https://github.com/FiloSottile/age/",
+            "github_release_asset_filter": "age-v(.*)-windows-amd64.zip",
             "decompress_flat": true,
-            "decompress_filter": "\\.exe$",
-            "version": "v1.1.1"
+            "decompress_filter": "\\.exe$"
         },
         {
             "name": "age-plugin-yubikey",

@@ -3,6 +3,7 @@ package downloader
 import (
 	"archive/zip"
 	"crypto/sha256"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -35,7 +36,89 @@ func adjustOverwriteFilesNames(target string, filter map[string]string) (string,
 	return target, nil
 }
 
+func getInfosFromGithubLink(url string) (owner, repo string, err error) {
+	// Define the regular expression pattern
+	pattern := `https://github.com/([^/]+)/([^/]+)`
+
+	// Compile the regular expression
+	regex := regexp.MustCompile(pattern)
+
+	// Find the matches
+	matches := regex.FindStringSubmatch(url)
+
+	// Extract the components
+	if len(matches) >= 3 {
+		owner := matches[1]
+		repo := matches[2]
+		return owner, repo, nil
+	} else {
+		err = fmt.Errorf("Could not find owner and repo in %v", url)
+	}
+	return "", "", err
+}
+
+var (
+	getHttp = func(url string) (*http.Response, error) {
+		return http.Get(url)
+	}
+)
+
+func getGithubReleaseAssetUrl(owner string, repo string, filter string) (string, error) {
+	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/releases/latest", owner, repo)
+	type githubApiRelease struct {
+		Draft      bool `json:"draft"`
+		Prerelease bool `json:"prerelease"`
+		Assets     []struct {
+			Name               string `json:"name"`
+			BrowserDownloadURL string `json:"browser_download_url"`
+		} `json:"assets"`
+	}
+	var release githubApiRelease
+	resp, err := getHttp(url)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	err = json.NewDecoder(resp.Body).Decode(&release)
+	if err != nil {
+		return "", err
+	}
+
+	if release.Draft || release.Prerelease {
+		return "", fmt.Errorf("Release is draft or prerelease")
+	}
+
+	// find asset with regex match from filter
+	regex := regexp.MustCompile(filter)
+	allBrowserDownloadURL := make([]string, 0)
+	for _, asset := range release.Assets {
+		if regex.MatchString(asset.Name) {
+			allBrowserDownloadURL = append(allBrowserDownloadURL, asset.BrowserDownloadURL)
+		}
+	}
+
+	if len(allBrowserDownloadURL) == 0 {
+		return "", fmt.Errorf("No matches found in assets, take a look to your github_release_asset_filter")
+	}
+	if len(allBrowserDownloadURL) > 1 {
+		return "", fmt.Errorf("Multiple matches found: %v", strings.Join(allBrowserDownloadURL, ", "))
+	}
+	return allBrowserDownloadURL[0], nil
+}
+
 func Get(link config.Link, dir string) (string, error) {
+	// Adjust url if config includes  asset filter for a github release
+	if link.GithubReleaseAssetFilter != "" {
+		owner, repo, err := getInfosFromGithubLink(link.Url)
+		if err != nil {
+			return "", err
+		}
+		link.Url, err = getGithubReleaseAssetUrl(owner, repo, link.GithubReleaseAssetFilter)
+		if err != nil {
+			return "", err
+		}
+	}
+
 	req, err := http.NewRequest("GET", link.Url, nil)
 	if err != nil {
 		return "", err
@@ -117,7 +200,7 @@ func Get(link config.Link, dir string) (string, error) {
 	if link.Hash != "" && link.Hash != sum {
 		// TODO handle this error
 		_ = os.Remove(tempDestinationPath)
-		return sum, fmt.Errorf("%v: hash mismatch for %v. Expected %v, actual %v", link.GetDisplayName(), link.Url, link.Hash[0:12], sum[0:12])
+		return sum, fmt.Errorf("%v: hash mismatch for %v. Expected %v, actual %v", link.GetDisplayName(), link.Url, link.Hash, sum)
 	}
 
 	err = os.Rename(tempDestinationPath, target)
