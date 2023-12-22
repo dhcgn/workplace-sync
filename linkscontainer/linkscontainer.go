@@ -28,6 +28,39 @@ func GetLinksLocal(f string) (config.LinksContainer, error) {
 	return l, nil
 }
 
+func GetLinksURL(u string) (config.LinksContainer, error) {
+	url, err := url.Parse(u)
+	if err != nil {
+		return config.LinksContainer{}, err
+	}
+
+	r := &http.Request{
+		Method: "GET",
+		URL:    url,
+	}
+	client := http.Client{
+		Timeout: 5 * time.Second,
+	}
+	resp, err := client.Do(r)
+	if err != nil {
+		return config.LinksContainer{}, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return config.LinksContainer{}, err
+	}
+
+	var l config.LinksContainer
+	err = json.Unmarshal(body, &l)
+	if err != nil {
+		return config.LinksContainer{}, err
+	}
+	l.SortLinks()
+	return l, nil
+}
+
 func GetLinksDNS(host string) (config.LinksContainer, error) {
 	txts, err := net.LookupTXT(host)
 	if err != nil {
@@ -47,36 +80,5 @@ func GetLinksDNS(host string) (config.LinksContainer, error) {
 		return config.LinksContainer{}, err
 	}
 
-	client := http.Client{
-		Timeout: 5 * time.Second,
-	}
-
-	url, err := url.Parse(u)
-	if err != nil {
-		return config.LinksContainer{}, err
-	}
-
-	r := &http.Request{
-		Method: "GET",
-		URL:    url,
-	}
-
-	resp, err := client.Do(r)
-	if err != nil {
-		return config.LinksContainer{}, err
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return config.LinksContainer{}, err
-	}
-
-	var l config.LinksContainer
-	err = json.Unmarshal(body, &l)
-	if err != nil {
-		return config.LinksContainer{}, err
-	}
-	l.SortLinks()
-	return l, nil
+	return GetLinksURL(u)
 }

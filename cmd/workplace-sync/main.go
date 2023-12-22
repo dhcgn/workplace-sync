@@ -25,6 +25,7 @@ var (
 var (
 	hostFlag        = flag.String("host", "", "The host which DNS TXT record points to an url of links.json")
 	localSource     = flag.String("local", "", "The local source of links (.json)")
+	urlSource       = flag.String("url", "", "The url of links.json")
 	allFlag         = flag.Bool("all", false, "Download all links, except skipped ones")
 	nameFlag        = flag.String("name", "", "The name or preffix of the tool to download")
 	checkLinksFlag  = flag.Bool("checklinks", false, "Check if all links responds with 200")
@@ -109,14 +110,26 @@ func main() {
 		return
 	}
 
-	if *hostFlag == "" && *localSource == "" {
-		fmt.Println("host or localSource is required")
+	if *hostFlag == "" && *localSource == "" && *urlSource == "" {
+		fmt.Println("host, urlSource or localSource is required")
 		flag.PrintDefaults()
 		return
 	}
 
-	if *hostFlag != "" && *localSource != "" {
-		fmt.Println("host and localSource are mutually exclusive")
+	notEmptyCount := 0
+	if *hostFlag != "" {
+		notEmptyCount++
+	}
+	if *localSource != "" {
+		notEmptyCount++
+	}
+	if *urlSource != "" {
+		notEmptyCount++
+	}
+
+	// host, localSource and urlSource are mutually exclusive, only one can be set
+	if notEmptyCount > 1 {
+		fmt.Println("host, localSource and urlSource are mutually exclusive")
 		flag.PrintDefaults()
 		return
 	}
@@ -127,7 +140,7 @@ func main() {
 		return
 	}
 
-	linksContainer, err := getLinksContainer(*hostFlag, *localSource)
+	linksContainer, err := getLinksContainer(*hostFlag, *localSource, *urlSource)
 	if err != nil {
 		pterm.Error.Printfln("Error getting links: %v", err)
 		return
@@ -279,8 +292,7 @@ func checkAndFilterLinksContainer(lc *config.LinksContainer, forceHashCheck, che
 	return infos, warnings, errors, nil
 }
 
-func getLinksContainer(host, path string) (config.LinksContainer, error) {
-	var linksContainer config.LinksContainer
+func getLinksContainer(host, path, url string) (config.LinksContainer, error) {
 	if host != "" {
 		pterm.Info.Printfln("Obtain links from DNS TXT record of %v", host)
 		l, err := linkscontainer.GetLinksDNS(host)
@@ -288,16 +300,27 @@ func getLinksContainer(host, path string) (config.LinksContainer, error) {
 			fmt.Println(err)
 			return config.LinksContainer{}, err
 		}
-		linksContainer = l
-	} else {
+		return l, nil
+	}
+
+	if path != "" {
 		pterm.Info.Printfln("Obtain links from local file %v", path)
 		l, err := linkscontainer.GetLinksLocal(path)
 		if err != nil {
 			return config.LinksContainer{}, err
 		}
-		linksContainer = l
+		return l, nil
 	}
-	return linksContainer, nil
+
+	if url != "" {
+		pterm.Info.Printfln("Obtain links from url %v", url)
+		l, err := linkscontainer.GetLinksURL(url)
+		if err != nil {
+			return config.LinksContainer{}, err
+		}
+		return l, nil
+	}
+	return config.LinksContainer{}, fmt.Errorf("host, path or url is required")
 }
 
 func createDownloadFolder(f string) error {
