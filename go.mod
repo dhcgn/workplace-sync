@@ -6,7 +6,7 @@ toolchain go1.21.5
 
 require (
 	github.com/c-bata/go-prompt v0.2.6
-	github.com/dhcgn/gh-update v0.0.2
+	github.com/dhcgn/gh-update v0.0.3
 	github.com/pterm/pterm v0.12.72
 )
 
