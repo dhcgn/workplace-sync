@@ -241,7 +241,7 @@ func main() {
 }
 
 func checkMinVersion(minVersion, currentVersion string) {
-	if minVersion == "" || minVersion == "dev" {
+	if minVersion == "" || currentVersion == "dev" {
 		return
 	}
 

@@ -73,7 +73,6 @@ func getLinksContainer(host, path, url string) (config.LinksContainer, error) {
 		pterm.Info.Printfln("Obtain links from DNS TXT record of %v", host)
 		l, err := linkscontainer.GetLinksDNS(host)
 		if err != nil {
-			fmt.Println(err)
 			return config.LinksContainer{}, err
 		}
 		links = l
