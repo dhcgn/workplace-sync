@@ -39,6 +39,7 @@ var (
 	forceHashCheck = config.GetConfig().ForceHashCheck
 )
 
+// Configuration for github.com/dhcgn/gh-update
 const (
 	updateName       = "dhcgn/workplace-sync"
 	updateAssetRegex = "^ws-.*windows.*zip$"
@@ -243,6 +244,7 @@ func checkMinVersion(minVersion, currentVersion string) {
 }
 
 var (
+	// checkLinkFunc is a variable to make it possible to mock the function in tests
 	checkLinkFunc = func(url string) error {
 		r, err := http.Head(url)
 		if err != nil {
