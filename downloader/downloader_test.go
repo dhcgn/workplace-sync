@@ -127,3 +127,39 @@ func Test_getGithubReleaseAssetUrl(t *testing.T) {
 		})
 	}
 }
+
+func Test_replaceFileNameIfMatchRegex(t *testing.T) {
+	type args struct {
+		fullpath string
+		filter   map[string]string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "",
+			args: args{
+				fullpath: "C:\\Users\\john\\Downloads\\age-v1.1.1-windows-amd64.exe",
+				filter: map[string]string{
+					"age-v(.*)-windows-amd64.exe": "age.exe",
+				},
+			},
+			want: "C:\\Users\\john\\Downloads\\age.exe",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := replaceFileNameIfMatchRegex(tt.args.fullpath, tt.args.filter)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("replaceFileNameIfMatchRegex() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("replaceFileNameIfMatchRegex() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
