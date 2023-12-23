@@ -49,12 +49,7 @@ func (l *Link) GetHostFromLink() string {
 
 func (lc *LinksContainer) SortLinks() {
 	slices.SortFunc(lc.Links, func(a, b Link) int {
-		if a.GetDisplayName() < b.GetDisplayName() {
-			return -1
-		} else if a.GetDisplayName() > b.GetDisplayName() {
-			return 1
-		}
-		return 0
+		return strings.Compare(strings.ToLower(a.GetDisplayName()), strings.ToLower(b.GetDisplayName()))
 	})
 }
 
