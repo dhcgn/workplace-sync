@@ -208,7 +208,7 @@ func main() {
 				continue
 			}
 
-			hash, err := downloader.Get(l, destFolder)
+			hash, err := downloader.DownloadFileToFolder(l, destFolder)
 			if err != nil {
 				pterm.Error.Printfln("link %v, folder: %v, error: %v", l.Url, destFolder, err)
 				continue

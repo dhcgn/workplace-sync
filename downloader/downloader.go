@@ -38,7 +38,7 @@ func replaceFileNameIfMatchRegex(fullpath string, filter map[string]string) (str
 	return fullpath, nil
 }
 
-func getInfosFromGithubLink(url string) (owner, repo string, err error) {
+func extractFromLink(url string) (owner, repo string, err error) {
 	// Define the regular expression pattern
 	pattern := `https://github.com/([^/]+)/([^/]+)`
 
@@ -108,10 +108,10 @@ func getGithubReleaseAssetUrl(owner string, repo string, filter string) (string,
 	return allBrowserDownloadURL[0], nil
 }
 
-func Get(link config.Link, dir string) (string, error) {
+func DownloadFileToFolder(link config.Link, dir string) (string, error) {
 	// Adjust url if config includes  asset filter for a github release
 	if link.GithubReleaseAssetFilter != "" {
-		owner, repo, err := getInfosFromGithubLink(link.Url)
+		owner, repo, err := extractFromLink(link.Url)
 		if err != nil {
 			return "", err
 		}
@@ -121,11 +121,7 @@ func Get(link config.Link, dir string) (string, error) {
 		}
 	}
 
-	req, err := http.NewRequest("GET", link.Url, nil)
-	if err != nil {
-		return "", err
-	}
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := getHttp(link.Url)
 	if err != nil {
 		return "", err
 	}

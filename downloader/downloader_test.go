@@ -42,7 +42,7 @@ func TestGetInfosFromGithubLink(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		owner, repo, err := getInfosFromGithubLink(test.url)
+		owner, repo, err := extractFromLink(test.url)
 		if err != nil && test.expectedErr == nil {
 			t.Errorf("Unexpected error for URL %s: %v", test.url, err)
 		} else if err == nil && test.expectedErr != nil {
