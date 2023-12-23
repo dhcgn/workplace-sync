@@ -161,7 +161,7 @@ func Test_replaceFileNameIfMatchRegex(t *testing.T) {
 				t.Errorf("replaceFileNameIfMatchRegex() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if got != tt.want {
+			if got != want {
 				t.Errorf("replaceFileNameIfMatchRegex() = %v, want %v", got, want)
 			}
 		})
