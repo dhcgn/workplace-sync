@@ -32,7 +32,7 @@ func Download(t string, linksContainer config.LinksContainer) {
 	}
 
 	if len(found) == 1 {
-		sum, err := downloader.Get(found[0], config.GetConfig().DestinationFolder)
+		sum, err := downloader.DownloadFileToFolder(found[0], config.GetConfig().DestinationFolder)
 		if err != nil {
 			pterm.Error.Println(err)
 			return
@@ -62,7 +62,7 @@ func Download(t string, linksContainer config.LinksContainer) {
 
 	pterm.Success.Printfln("Found file %v", match[0].GetDisplayName())
 
-	sum, err := downloader.Get(match[0], config.GetConfig().DestinationFolder)
+	sum, err := downloader.DownloadFileToFolder(match[0], config.GetConfig().DestinationFolder)
 	if err != nil {
 		pterm.Error.Print(err)
 	}

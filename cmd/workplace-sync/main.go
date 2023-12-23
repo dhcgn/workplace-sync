@@ -6,13 +6,12 @@ import (
 	"net/http"
 	"os"
 	"runtime"
-	"strings"
+	"sync"
 
 	update "github.com/dhcgn/gh-update"
 	"github.com/dhcgn/workplace-sync/config"
 	"github.com/dhcgn/workplace-sync/downloader"
 	"github.com/dhcgn/workplace-sync/interaction"
-	"github.com/dhcgn/workplace-sync/linkscontainer"
 	"golang.org/x/mod/semver"
 
 	"github.com/pterm/pterm"
@@ -25,6 +24,7 @@ var (
 var (
 	hostFlag        = flag.String("host", "", "The host which DNS TXT record points to an url of links.json")
 	localSource     = flag.String("local", "", "The local source of links (.json)")
+	urlSource       = flag.String("url", "", "The url of links.json")
 	allFlag         = flag.Bool("all", false, "Download all links, except skipped ones")
 	nameFlag        = flag.String("name", "", "The name or preffix of the tool to download")
 	checkLinksFlag  = flag.Bool("checklinks", false, "Check if all links responds with 200")
@@ -38,6 +38,7 @@ var (
 	forceHashCheck = config.GetConfig().ForceHashCheck
 )
 
+// Configuration for github.com/dhcgn/gh-update
 const (
 	updateName       = "dhcgn/workplace-sync"
 	updateAssetRegex = "^ws-.*windows.*zip$"
@@ -109,14 +110,26 @@ func main() {
 		return
 	}
 
-	if *hostFlag == "" && *localSource == "" {
-		fmt.Println("host or localSource is required")
+	if *hostFlag == "" && *localSource == "" && *urlSource == "" {
+		fmt.Println("host, urlSource or localSource is required")
 		flag.PrintDefaults()
 		return
 	}
 
-	if *hostFlag != "" && *localSource != "" {
-		fmt.Println("host and localSource are mutually exclusive")
+	notEmptyCount := 0
+	if *hostFlag != "" {
+		notEmptyCount++
+	}
+	if *localSource != "" {
+		notEmptyCount++
+	}
+	if *urlSource != "" {
+		notEmptyCount++
+	}
+
+	// host, localSource and urlSource are mutually exclusive, only one can be set
+	if notEmptyCount > 1 {
+		fmt.Println("host, localSource and urlSource are mutually exclusive")
 		flag.PrintDefaults()
 		return
 	}
@@ -127,7 +140,7 @@ func main() {
 		return
 	}
 
-	linksContainer, err := getLinksContainer(*hostFlag, *localSource)
+	linksContainer, err := getLinksContainer(*hostFlag, *localSource, *urlSource)
 	if err != nil {
 		pterm.Error.Printfln("Error getting links: %v", err)
 		return
@@ -135,19 +148,37 @@ func main() {
 
 	checkMinVersion(linksContainer.MinVersion, Version)
 
-	infos, warns, errors, err := checkAndFilterLinksContainer(&linksContainer, forceHashCheck, *checkLinksFlag)
+	infos := make(chan string)
+	warns := make(chan string)
+	errors := make(chan string)
+
+	go func() {
+		for {
+			select {
+			case i := <-infos:
+				pterm.Info.Printfln(i)
+			case w := <-warns:
+				pterm.Warning.Printfln(w)
+			case e := <-errors:
+				pterm.Error.Printfln(e)
+			}
+		}
+	}()
+
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	go func() {
+		err := checkAndFilterLinksContainer(&linksContainer, forceHashCheck, *checkLinksFlag, infos, warns, errors)
+		if err != nil {
+			pterm.Error.Printfln("Error checking links: %v", err)
+		}
+		wg.Done()
+	}()
+	wg.Wait()
+
 	if err != nil {
 		pterm.Error.Printfln("Error checking links: %v", err)
 		return
-	}
-	for _, i := range infos {
-		pterm.Info.Printfln(i)
-	}
-	for _, w := range warns {
-		pterm.Warning.Printfln(w)
-	}
-	for _, w := range errors {
-		pterm.Error.Printfln(w)
 	}
 
 	if len(linksContainer.Links) == 0 {
@@ -177,7 +208,7 @@ func main() {
 				continue
 			}
 
-			hash, err := downloader.Get(l, destFolder)
+			hash, err := downloader.DownloadFileToFolder(l, destFolder)
 			if err != nil {
 				pterm.Error.Printfln("link %v, folder: %v, error: %v", l.Url, destFolder, err)
 				continue
@@ -210,7 +241,7 @@ func main() {
 }
 
 func checkMinVersion(minVersion, currentVersion string) {
-	if minVersion == "" || minVersion == "dev" {
+	if minVersion == "" || currentVersion == "dev" {
 		return
 	}
 
@@ -230,6 +261,7 @@ func checkMinVersion(minVersion, currentVersion string) {
 }
 
 var (
+	// checkLinkFunc is a variable to make it possible to mock the function in tests
 	checkLinkFunc = func(url string) error {
 		r, err := http.Head(url)
 		if err != nil {
@@ -241,64 +273,6 @@ var (
 		return nil
 	}
 )
-
-func checkAndFilterLinksContainer(lc *config.LinksContainer, forceHashCheck, checkLink bool) (infos, warnings, errors []string, err error) {
-	if forceHashCheck {
-		var filteredLinksContainer config.LinksContainer
-		for _, l := range lc.Links {
-			if l.Hash == "" {
-				warnings = append(warnings, fmt.Sprintf("Link %v (%v) has no hash, will be removed because ForceHashCheck is active", l.GetDisplayName(), l.Version))
-			} else {
-				filteredLinksContainer.Links = append(filteredLinksContainer.Links, l)
-			}
-		}
-		lc = &filteredLinksContainer
-	}
-
-	var filteredLinksContainer config.LinksContainer
-	for _, l := range lc.Links {
-		if l.GithubReleaseAssetFilter != "" && ((l.Version != "" && l.Version != "latest") || l.Hash != "") {
-			warnings = append(warnings, fmt.Sprintf("Link %v (%v) has GithubReleaseAssetFilter so and Version or Hash will be ignored", l.GetDisplayName(), l.Version))
-		}
-		if strings.HasPrefix(l.Url, "https://github.com/") && l.GithubReleaseAssetFilter == "" {
-			warnings = append(warnings, fmt.Sprintf("Link %v (%v) has no GithubReleaseAssetFilter, so download is pinned and not latest release is used", l.GetDisplayName(), l.Version))
-		}
-
-		if checkLink {
-			err := checkLinkFunc(l.Url)
-			if err != nil {
-				errors = append(errors, fmt.Sprintf("Link %v (%v) is invalid: %v, url: %v", l.GetDisplayName(), l.Version, err, l.Url))
-			} else {
-				infos = append(infos, fmt.Sprintf("Link %v (%v) is valid, url: %v", l.GetDisplayName(), l.Version, l.Url))
-				filteredLinksContainer.Links = append(filteredLinksContainer.Links, l)
-			}
-		}
-	}
-	lc = &filteredLinksContainer
-
-	return infos, warnings, errors, nil
-}
-
-func getLinksContainer(host, path string) (config.LinksContainer, error) {
-	var linksContainer config.LinksContainer
-	if host != "" {
-		pterm.Info.Printfln("Obtain links from DNS TXT record of %v", host)
-		l, err := linkscontainer.GetLinksDNS(host)
-		if err != nil {
-			fmt.Println(err)
-			return config.LinksContainer{}, err
-		}
-		linksContainer = l
-	} else {
-		pterm.Info.Printfln("Obtain links from local file %v", path)
-		l, err := linkscontainer.GetLinksLocal(path)
-		if err != nil {
-			return config.LinksContainer{}, err
-		}
-		linksContainer = l
-	}
-	return linksContainer, nil
-}
 
 func createDownloadFolder(f string) error {
 	_, err := os.Stat(f)

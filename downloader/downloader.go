@@ -17,9 +17,11 @@ import (
 	"github.com/schollz/progressbar/v3"
 )
 
-func adjustOverwriteFilesNames(target string, filter map[string]string) (string, error) {
+// replaceFileNameIfMatchRegex checks if the file name matches a regex and if so, replaces the file name with the new name
+// Sample filter: "^gokey-v[0-9\\.]{1,}-windows-amd64.exe$": "gokey.exe"
+func replaceFileNameIfMatchRegex(fullpath string, filter map[string]string) (string, error) {
 	if filter == nil {
-		return target, nil
+		return fullpath, nil
 	}
 
 	for regex, new := range filter {
@@ -28,15 +30,15 @@ func adjustOverwriteFilesNames(target string, filter map[string]string) (string,
 			return "", err
 		}
 
-		if r.MatchString(filepath.Base(target)) {
-			target = filepath.Join(filepath.Dir(target), new)
-			return target, nil
+		if r.MatchString(filepath.Base(fullpath)) {
+			fullpath = filepath.Join(filepath.Dir(fullpath), new)
+			return fullpath, nil
 		}
 	}
-	return target, nil
+	return fullpath, nil
 }
 
-func getInfosFromGithubLink(url string) (owner, repo string, err error) {
+func extractFromLink(url string) (owner, repo string, err error) {
 	// Define the regular expression pattern
 	pattern := `https://github.com/([^/]+)/([^/]+)`
 
@@ -106,10 +108,10 @@ func getGithubReleaseAssetUrl(owner string, repo string, filter string) (string,
 	return allBrowserDownloadURL[0], nil
 }
 
-func Get(link config.Link, dir string) (string, error) {
+func DownloadFileToFolder(link config.Link, dir string) (string, error) {
 	// Adjust url if config includes  asset filter for a github release
 	if link.GithubReleaseAssetFilter != "" {
-		owner, repo, err := getInfosFromGithubLink(link.Url)
+		owner, repo, err := extractFromLink(link.Url)
 		if err != nil {
 			return "", err
 		}
@@ -119,11 +121,7 @@ func Get(link config.Link, dir string) (string, error) {
 		}
 	}
 
-	req, err := http.NewRequest("GET", link.Url, nil)
-	if err != nil {
-		return "", err
-	}
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := getHttp(link.Url)
 	if err != nil {
 		return "", err
 	}
@@ -161,7 +159,7 @@ func Get(link config.Link, dir string) (string, error) {
 		target = filepath.Join(installerFolder, file)
 	}
 
-	target, err = adjustOverwriteFilesNames(target, link.OverwriteFilesNames)
+	target, err = replaceFileNameIfMatchRegex(target, link.OverwriteFilesNames)
 	if err != nil {
 		return "", err
 	}
@@ -318,7 +316,7 @@ func unzip(src string, destination string, link config.Link) ([]string, error) {
 			fpath = filepath.Join(destination, f.Name)
 		}
 
-		fpath, err = adjustOverwriteFilesNames(fpath, link.OverwriteFilesNames)
+		fpath, err = replaceFileNameIfMatchRegex(fpath, link.OverwriteFilesNames)
 		if err != nil {
 			return filenames, err
 		}

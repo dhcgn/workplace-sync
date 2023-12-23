@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -42,7 +43,7 @@ func TestGetInfosFromGithubLink(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		owner, repo, err := getInfosFromGithubLink(test.url)
+		owner, repo, err := extractFromLink(test.url)
 		if err != nil && test.expectedErr == nil {
 			t.Errorf("Unexpected error for URL %s: %v", test.url, err)
 		} else if err == nil && test.expectedErr != nil {
@@ -123,6 +124,45 @@ func Test_getGithubReleaseAssetUrl(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("getGithubReleaseAssetUrl() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_replaceFileNameIfMatchRegex(t *testing.T) {
+	type args struct {
+		fullpath string
+		filter   map[string]string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "",
+			args: args{
+				fullpath: "\\Users\\john\\Downloads\\age-v1.1.1-windows-amd64.exe",
+				filter: map[string]string{
+					"age-v(.*)-windows-amd64.exe": "age.exe",
+				},
+			},
+			want: "\\Users\\john\\Downloads\\age.exe",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fullpath := strings.ReplaceAll(tt.args.fullpath, `\`, string(filepath.Separator))
+			want := strings.ReplaceAll(tt.want, `\`, string(filepath.Separator))
+
+			got, err := replaceFileNameIfMatchRegex(fullpath, tt.args.filter)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("replaceFileNameIfMatchRegex() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != want {
+				t.Errorf("replaceFileNameIfMatchRegex() = %v, want %v", got, want)
 			}
 		})
 	}

@@ -2,6 +2,7 @@ package config
 
 import (
 	"net/url"
+	"path"
 	"strings"
 	"time"
 
@@ -31,9 +32,7 @@ func (l *Link) GetDisplayName() string {
 	if l.Name != "" {
 		return l.Name
 	}
-	splits := strings.Split(l.Url, "/")
-	last := splits[len(splits)-1]
-	return last
+	return strings.ReplaceAll(path.Base(l.Url), path.Ext(l.Url), "")
 }
 
 func (l *Link) GetHostFromLink() string {
@@ -48,8 +47,8 @@ func (l *Link) GetHostFromLink() string {
 }
 
 func (lc *LinksContainer) SortLinks() {
-	slices.SortFunc(lc.Links, func(a, b Link) bool {
-		return a.GetDisplayName() < b.GetDisplayName()
+	slices.SortFunc(lc.Links, func(a, b Link) int {
+		return strings.Compare(strings.ToLower(a.GetDisplayName()), strings.ToLower(b.GetDisplayName()))
 	})
 }
 
