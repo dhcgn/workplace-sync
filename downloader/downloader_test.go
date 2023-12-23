@@ -153,8 +153,8 @@ func Test_replaceFileNameIfMatchRegex(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			fullpath := strings.ReplaceAll(tt.args.fullpath, string(filepath.Separator), string(filepath.Separator))
-			want := strings.ReplaceAll(tt.want, string(filepath.Separator), string(filepath.Separator))
+			fullpath := strings.ReplaceAll(tt.args.fullpath, `\`, string(filepath.Separator))
+			want := strings.ReplaceAll(tt.want, `\`, string(filepath.Separator))
 
 			got, err := replaceFileNameIfMatchRegex(fullpath, tt.args.filter)
 			if (err != nil) != tt.wantErr {
