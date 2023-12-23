@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -152,7 +153,8 @@ func Test_replaceFileNameIfMatchRegex(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := replaceFileNameIfMatchRegex(tt.args.fullpath, tt.args.filter)
+			fullpath := strings.ReplaceAll(tt.args.fullpath, string(filepath.Separator), string(filepath.Separator))
+			got, err := replaceFileNameIfMatchRegex(fullpath, tt.args.filter)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("replaceFileNameIfMatchRegex() error = %v, wantErr %v", err, tt.wantErr)
 				return
