@@ -24,7 +24,6 @@ func GetLinksLocal(f string) (config.LinksContainer, error) {
 	if err != nil {
 		return config.LinksContainer{}, err
 	}
-	l.SortLinks()
 	return l, nil
 }
 
@@ -57,7 +56,6 @@ func GetLinksURL(u string) (config.LinksContainer, error) {
 	if err != nil {
 		return config.LinksContainer{}, err
 	}
-	l.SortLinks()
 	return l, nil
 }
 

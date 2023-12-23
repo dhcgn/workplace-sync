@@ -64,6 +64,11 @@ func checkAndFilterLinksContainer(lc *config.LinksContainer, forceHashCheck, che
 }
 
 func getLinksContainer(host, path, url string) (config.LinksContainer, error) {
+	if host == "" && path == "" && url == "" {
+		return config.LinksContainer{}, fmt.Errorf("no source for links provided")
+	}
+
+	var links config.LinksContainer
 	if host != "" {
 		pterm.Info.Printfln("Obtain links from DNS TXT record of %v", host)
 		l, err := linkscontainer.GetLinksDNS(host)
@@ -71,7 +76,7 @@ func getLinksContainer(host, path, url string) (config.LinksContainer, error) {
 			fmt.Println(err)
 			return config.LinksContainer{}, err
 		}
-		return l, nil
+		links = l
 	}
 
 	if path != "" {
@@ -80,7 +85,7 @@ func getLinksContainer(host, path, url string) (config.LinksContainer, error) {
 		if err != nil {
 			return config.LinksContainer{}, err
 		}
-		return l, nil
+		links = l
 	}
 
 	if url != "" {
@@ -89,7 +94,8 @@ func getLinksContainer(host, path, url string) (config.LinksContainer, error) {
 		if err != nil {
 			return config.LinksContainer{}, err
 		}
-		return l, nil
+		links = l
 	}
-	return config.LinksContainer{}, fmt.Errorf("host, path or url is required")
+	links.SortLinks()
+	return links, nil
 }
