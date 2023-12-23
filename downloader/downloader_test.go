@@ -143,12 +143,12 @@ func Test_replaceFileNameIfMatchRegex(t *testing.T) {
 		{
 			name: "",
 			args: args{
-				fullpath: "C:\\Users\\john\\Downloads\\age-v1.1.1-windows-amd64.exe",
+				fullpath: "\\Users\\john\\Downloads\\age-v1.1.1-windows-amd64.exe",
 				filter: map[string]string{
 					"age-v(.*)-windows-amd64.exe": "age.exe",
 				},
 			},
-			want: "C:\\Users\\john\\Downloads\\age.exe",
+			want: "\\Users\\john\\Downloads\\age.exe",
 		},
 	}
 	for _, tt := range tests {
